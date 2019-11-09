@@ -1,4 +1,4 @@
-# neurotrend
+# neurotrend testing task
 
 ## Project setup
 ```
