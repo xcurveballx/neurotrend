@@ -1,32 +1,53 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
+    <app-notification v-show="notification.isShown" :type="notification.type">
+        {{ notification.message }}
+    </app-notification>
+    <app-header />
     <router-view />
+    <app-footer />
   </div>
 </template>
 
-<style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import AppNotification from "@/components/Notification.vue";
+import AppHeader from "@/components/Header.vue";
+import AppFooter from "@/components/Footer.vue";
+import EventBus from '@/bus';
 
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+export default {
+  name: "App",
+  data() {
+    return {
+      notification: {
+        message: '',
+        isHidden: true,
+        type: ''
+      }
+    };
+  },
+  methods: {
+    showNotification: function({message, type}) {
+      this.notification.message = message;
+      this.notification.type = type;
+      this.notification.isShown = true;
+      setTimeout(this.hideNotification, 5000);
+    },
+    hideNotification: function() {
+      if (this.notification.isShown == false) return;
+      this.notification.isShown = false;
+      this.notification.message = '';
+      this.notification.type = '';
+    }
+  },
+  components: {
+    AppNotification,
+    AppHeader,
+    AppFooter
+  },
+  mounted () {
+    EventBus.$on('SHOW_NOTIFICATION', this.showNotification);
+    EventBus.$on('HIDE_NOTIFICATION', this.hideNotification);
+  }
+};
+</script>

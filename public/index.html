@@ -6,92 +6,14 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title>Neurotrend | Dogs Shelter API</title>
-    <style>.is-fixed{position:fixed;z-index:9999;}</style>
+    <style>
+    .is-fixed{position:fixed;z-index:9999;right:0;bottom:0;max-width:25%;}
+    .notification.y-5{padding-top:5em; padding-bottom:5em;}
+    </style>
 </head>
 <body>
-    <section class="is-hidden is-fixed">
-        <div class="notification is-success is-danger">
-            <button class="delete"></button>
-            Primar lorem ipsum dolor sit amet, consectetur adipiscing elit lorem ipsum dolor. <strong>Pellentesque risus mi</strong>, tempus quis placerat ut, porta nec nulla. Vestibulum rhoncus ac ex sit amet fringilla. Nullam gravida purus diam, et dictum <a>felis venenatis</a> efficitur. Sit amet, consectetur adipiscing elit
-        </div>
-    </section>
-    <section class="section has-background-light">
-        <div class="container has-text-centered">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Dog.svg" width="52">
-            <h1 class="title">Dog Shelter API</h1>
-            <p class="subtitle">
-                made for Neurotrend with <strong>Bulma</strong> & <strong>Vue</strong>!
-            </p>
-        </div>
-    </section>
-    <section class="section has-background-light">
-        <div class="container">
-            <div class="columns">
-                <div class="column is-size-5">
-                    <h1 class="title">About shelters</h1>
-                        <p>
-                            An animal shelter or pound is a place where stray, lost, abandoned or surrendered animals, mostly dogs and cats, and sometimes sick or wounded wildlife are kept and rehabilitated. While no-kill shelters exist, it is sometimes policy to euthanize sick animals, and any animal that is not claimed quickly enough by a previous or new owner.
-                        </p>
-                </div>
-            <div class="column is-half-tablet is-one-third-desktop">
-            <form action="" class="box">
-                <div class="field">
-                    <label for="" class="label">Username</label>
-                    <div class="control has-icons-left">
-                        <input type="email" placeholder="e.g. Username" class="input" required>
-                        <span class="icon is-small is-left">
-                        <i class="fa fa-envelope"></i></span>
-                    </div>
-                </div>
-                <div class="field">
-                    <label for="" class="label">Password</label>
-                    <div class="control has-icons-left">
-                        <input type="password" placeholder="*******" class="input" required>
-                        <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
-                    </div>
-                </div>
-                <div class="field">
-                    <button class="button is-success">Login</button>
-                </div>
-            </form>
-            </div>
-            </div>
-        </div>
-    </section>
-    <section class="section has-background-light is-size-5">
-        <div class="container">
-            <nav class="navbar has-background-light" role="navigation" aria-label="main navigation">
-                <div class="navbar-brand">
-                    <a class="navbar-item" href="/">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Dog.svg" height="52">
-                    </a>
-                    <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-                        <span aria-hidden="true"></span>
-                        <span aria-hidden="true"></span>
-                        <span aria-hidden="true"></span>
-                    </a>
-                </div>
-                <div class="navbar-menu">
-                    <div class="navbar-start">
-                        <a class="navbar-item is-active">Dogs</a>
-                        <a class="navbar-item">Trustees</a>
-                        <a class="navbar-item">Payments</a>
-                    </div>
-                    <div class="navbar-end">
-                        <a class="navbar-item has-text-danger">Log out</a>
-                    </div>
-                </div>
-            </nav>
-        </div>
-    </section>
-    <section class="section has-background-light is-size-5">
-        <div class="container">
-            <div class="notification has-text-centered is-italic">
-                  <strong>Hi, Username!</strong> Use the navigation links above to visit corresponding page.
-            </div>
-        </div>
-    </section>
-    <section class="section has-background-light">
+    <div id="app"></div>
+    <!--<section class="section has-background-light">
         <div class="container">
             <div class="columns">
                 <div class="column">
@@ -273,14 +195,7 @@
             </div>
         </div>
     </section>
-    <footer class="footer has-background-light">
-        <div class="content has-text-centered">
-            <p>
-                <strong>Dog Shelter API</strong> by <a href="https://github.com/xcurveballx">curveball</a> for <a href="https://neurotrend.ru/">Neurotrend</a>. The source code is licensed <a href="http://opensource.org/licenses/mit-license.php">MIT</a>.
-            </p>
-        </div>
-    </footer>
-    <div id="app"></div>
+-->
     <!-- built files will be auto injected -->
-  </body>
+</body>
 </html>

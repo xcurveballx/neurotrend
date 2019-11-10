@@ -1,18 +1,30 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
-  </div>
+    <guest v-if="!apiKey"></guest>
+    <welcome v-else></welcome>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+import Guest from "@/components/Guest.vue";
+import Welcome from "@/components/Welcome.vue";
+import { mapGetters, mapMutations, mapActions } from 'vuex';
+import EventBus from '@/bus';
 
 export default {
   name: "home",
   components: {
-    HelloWorld
+    Welcome,
+    Guest
+  },
+  computed: {
+    ...mapGetters("global", ["apiKey"])
+  },
+  methods: {
+    ...mapMutations("global", ["setApiKey"]),
+    ...mapActions("global", ["login", "logout"])
+  },
+  mounted () {
+    EventBus.$on('LOGIN', this.login);
+    EventBus.$on('LOGOUT', this.logout);
   }
 };
 </script>
