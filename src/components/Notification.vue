@@ -1,8 +1,8 @@
 <template>
 <div class="is-fixed">
-    <div class="notification" :class="{ 'is-danger': type === 'error', 'is-success': type === 'success' }">
-        <button @click="hide" class="delete"></button>
-        <slot></slot>
+    <div v-for="notification in Array.from(notifications)" :key="notification.id" class="notification" :class="{ 'is-danger': notification.type === 'error', 'is-success': notification.type === 'success' }">
+        <button @click="remove(notification.id)" class="delete"></button>
+        {{ notification.message }}
     </div>
 </div>
 </template>
@@ -13,14 +13,14 @@ import EventBus from '@/bus';
 export default {
   name: "Notification",
   props: {
-    type: {
+    notifications: {
       required: true,
-      type: String
+      type: Map
     }
   },
   methods: {
-    hide() {
-      EventBus.$emit("HIDE_NOTIFICATION");
+    remove(id) {
+      EventBus.$emit("REMOVE_NOTIFICATION", id);
     }
   }
 };

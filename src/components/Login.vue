@@ -4,7 +4,7 @@
     <div class="field">
         <label for="" class="label">Username</label>
         <div class="control has-icons-left">
-            <input type="text" placeholder="e.g. Username" class="input" :class="{'is-danger': !user && isSub}" v-model="user">
+            <input type="text" placeholder="e.g. Username" class="input" :class="{'is-danger': !user && isSub}" v-model="user" @keyup.enter="emitLoginEvent">
             <span class="icon is-small is-left">
             <i class="fa fa-user"></i></span>
             <input-val-mess v-show="!user && isSub">
@@ -15,7 +15,7 @@
     <div class="field">
         <label for="" class="label">Password</label>
         <div class="control has-icons-left">
-            <input type="password" placeholder="******" class="input" :class="{'is-danger': !pass && isSub}" v-model="pass">
+            <input type="password" placeholder="******" class="input" :class="{'is-danger': !pass && isSub}" v-model="pass" @keyup.enter="emitLoginEvent">
             <span class="icon is-small is-left">
             <i class="fa fa-lock"></i></span>
             <input-val-mess v-show="!pass && isSub">
@@ -24,7 +24,7 @@
         </div>
     </div>
     <div class="field">
-        <btn @click.native="emitLoginEvent" class="is-success">Login</btn>
+        <btn @click.native="emitLoginEvent" class="is-success" :class="{'is-loading': $store.getters['global/isAppBusy'], 'is-static': $store.getters['global/isAppBusy']}">Login</btn>
     </div>
 </div>
 </div>
@@ -50,6 +50,9 @@ export default {
   },
   methods: {
     emitLoginEvent() {
+      if (this.$store.getters['global/isAppBusy']) return;
+      this.$store.commit('global/setAppBusy', true);
+
       this.isSub = true;
       if (!this.user || !this.pass) return;
       let payload = {

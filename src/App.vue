@@ -1,8 +1,6 @@
 <template>
   <div id="app">
-    <app-notification v-show="notification.isShown" :type="notification.type">
-        {{ notification.message }}
-    </app-notification>
+    <app-notification v-show="Object.keys(notifications).length" :notifications="notifications" />
     <app-header />
     <router-view />
     <app-footer />
@@ -19,25 +17,21 @@ export default {
   name: "App",
   data() {
     return {
-      notification: {
-        message: '',
-        isHidden: true,
-        type: ''
-      }
+      notifications: new Map()
     };
   },
   methods: {
     showNotification: function({message, type}) {
-      this.notification.message = message;
-      this.notification.type = type;
-      this.notification.isShown = true;
-      setTimeout(this.hideNotification, 5000);
+      let notification = {};
+      notification.message = message;
+      notification.type = type;
+      notification.id = + new Date();
+
+      this.notifications.set(notification.id, notification);
+      //setTimeout(this.hideNotification, 3000);
     },
-    hideNotification: function() {
-      if (this.notification.isShown == false) return;
-      this.notification.isShown = false;
-      this.notification.message = '';
-      this.notification.type = '';
+    hideNotification: function(key) {
+      delete this.notifications[key];
     }
   },
   components: {
@@ -47,7 +41,7 @@ export default {
   },
   mounted () {
     EventBus.$on('SHOW_NOTIFICATION', this.showNotification);
-    EventBus.$on('HIDE_NOTIFICATION', this.hideNotification);
+    EventBus.$on('REMOVE_NOTIFICATION', this.hideNotification);
   }
 };
 </script>

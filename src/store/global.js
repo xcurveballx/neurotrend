@@ -4,14 +4,19 @@ import EventBus from '@/bus';
 export const global = {
   namespaced: true,
   state: {
-    apiKey: ''
+    apiKey: '',
+    isAppBusy: false
   },
   getters: {
-    apiKey: state => state.apiKey
+    apiKey: state => state.apiKey,
+    isAppBusy: state => state.isAppBusy
   },
   mutations: {
     setApiKey(state, key) {
       state.apiKey = key;
+    },
+    setAppBusy(state, isAppBusy) {
+      state.isAppBusy = isAppBusy;
     }
   },
   actions: {
@@ -22,6 +27,10 @@ export const global = {
           context.commit('setApiKey', token);
       } else {
           EventBus.$emit("SHOW_NOTIFICATION", {message, 'type': 'error'});
+      }
+
+      if (context.getters.isAppBusy) {
+          context.commit('setAppBusy', false);
       }
 
       return Promise.resolve();

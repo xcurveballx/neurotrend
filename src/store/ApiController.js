@@ -10,13 +10,12 @@ export default class ApiController {
     }
 
     static logout(key) {
-        let url = `${ApiController.host}${ApiController.logout_path}`;
-
-        let opts = {
-            headers: {
-                'Authorization': `Token ${key}`,
-            }
-        };
+        let url = `${ApiController.host}${ApiController.logout_path}`,
+            opts = {
+                headers: {
+                    'Authorization': `Token ${key}`,
+                }
+            };
 
         return fetch(url, opts).then(response => response.json());
     }
