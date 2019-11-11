@@ -52,13 +52,13 @@ export default {
   name: "dogs",
   data() {
     return {
-      model: 'dog'
+      modelName: 'dog'
     };
   },
   components: {
   },
   mounted () {
-    EventBus.$emit('FETCH_DOGS', this.model);
+    EventBus.$emit('FETCH_MODEL', this.modelName);
   }
 };
 </script>

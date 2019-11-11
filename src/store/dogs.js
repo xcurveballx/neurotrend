@@ -17,7 +17,7 @@ export const dogs = {
   actions: {
     async fetchDogs(context, model) {
       //let {status = '', dogs = [], message = 'Something went wrong :('} =
-      let key = context.rootState.global.apiKey;
+      let key = context.rootState.apiKey;
       let res = await ApiController.fetchItems(key, model);
       console.log(res);
       // if (status == 'OK' && token) {

@@ -1,10 +1,10 @@
 <template>
-<div class="is-fixed">
-    <div v-for="notification in notifications" :key="notification.id" class="notification" :class="{ 'is-danger': notification.type === 'error', 'is-success': notification.type === 'success' }">
-        <button @click="remove(notification.id)" class="delete"></button>
-        {{ notification.message }}
+    <div class="is-fixed">
+        <div v-for="notification in notifications" :key="notification.id" class="notification" :class="{ 'is-danger': ifToAddClass(notification.type, 'error'), 'is-success': ifToAddClass(notification.type, 'success') }">
+            <button @click="remove(notification.id)" class="delete"></button>
+            {{ notification.message }}
+        </div>
     </div>
-</div>
 </template>
 
 <script>
@@ -19,8 +19,11 @@ export default {
     }
   },
   methods: {
-    remove(id) {
+    remove (id) {
       EventBus.$emit("REMOVE_NOTIFICATION", id);
+    },
+    ifToAddClass (notificationType, classType) {
+      return notificationType === classType;
     }
   }
 };

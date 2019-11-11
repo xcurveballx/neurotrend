@@ -1,12 +1,12 @@
 <template>
-<section class="section">
-<div class="container">
-    <div class="columns">
-        <about />
-        <login />
-    </div>
-</div>
-</section>
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <about />
+                <login />
+            </div>
+        </div>
+    </section>
 </template>
 
 <script>
@@ -19,5 +19,5 @@ export default {
     About,
     Login
   }
-};
+}
 </script>
