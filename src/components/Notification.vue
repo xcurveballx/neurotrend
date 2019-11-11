@@ -1,6 +1,6 @@
 <template>
 <div class="is-fixed">
-    <div v-for="notification in Array.from(notifications)" :key="notification.id" class="notification" :class="{ 'is-danger': notification.type === 'error', 'is-success': notification.type === 'success' }">
+    <div v-for="notification in notifications" :key="notification.id" class="notification" :class="{ 'is-danger': notification.type === 'error', 'is-success': notification.type === 'success' }">
         <button @click="remove(notification.id)" class="delete"></button>
         {{ notification.message }}
     </div>
@@ -15,7 +15,7 @@ export default {
   props: {
     notifications: {
       required: true,
-      type: Map
+      type: Array
     }
   },
   methods: {

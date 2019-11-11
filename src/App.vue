@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <app-notification v-show="Object.keys(notifications).length" :notifications="notifications" />
+    <app-notification v-show="notifications.length" :notifications="notifications" />
     <app-header />
     <router-view />
     <app-footer />
@@ -17,7 +17,7 @@ export default {
   name: "App",
   data() {
     return {
-      notifications: new Map()
+      notifications: []
     };
   },
   methods: {
@@ -27,11 +27,13 @@ export default {
       notification.type = type;
       notification.id = + new Date();
 
-      this.notifications.set(notification.id, notification);
-      //setTimeout(this.hideNotification, 3000);
+      this.notifications.push(notification);
+      setTimeout(this.hideNotification, 5000, notification.id);
     },
     hideNotification: function(key) {
-      delete this.notifications[key];
+      this.notifications = this.notifications.filter((el) => {
+        return el.id != key;
+      });
     }
   },
   components: {

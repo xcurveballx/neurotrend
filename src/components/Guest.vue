@@ -1,5 +1,5 @@
 <template>
-<section class="section has-background-light">
+<section class="section">
 <div class="container">
     <div class="columns">
         <about />

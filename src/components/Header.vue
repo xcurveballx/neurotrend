@@ -1,5 +1,5 @@
 <template>
-<section class="section has-background-light">
+<section class="section">
     <div class="container has-text-centered">
         <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Dog.svg" width="52">
         <h1 class="title">Dog Shelter API</h1>

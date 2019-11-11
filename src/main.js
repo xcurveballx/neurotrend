@@ -4,6 +4,7 @@ import router from "./router";
 import store from "./store";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import 'bulma/css/bulma.css';
+import './assets/styles.css';
 
 Vue.config.productionTip = false;
 

@@ -1,30 +1,21 @@
 <template>
-    <guest v-if="!apiKey"></guest>
-    <welcome v-else></welcome>
+<div class="notification has-text-centered is-italic y-5">
+      <strong>Hi, {{ userName | uppercase }}!</strong> Use the navigation links above to visit corresponding page.
+</div>
 </template>
 
 <script>
-import Guest from "@/components/Guest.vue";
-import Welcome from "@/components/Welcome.vue";
-import { mapGetters, mapMutations, mapActions } from 'vuex';
-import EventBus from '@/bus';
-
 export default {
-  name: "home",
-  components: {
-    Welcome,
-    Guest
+  name: "Home",
+  data() {
+    return {
+      userName: this.$store.getters['global/user']
+    };
   },
-  computed: {
-    ...mapGetters("global", ["apiKey"])
-  },
-  methods: {
-    ...mapMutations("global", ["setApiKey"]),
-    ...mapActions("global", ["login", "logout"])
-  },
-  mounted () {
-    EventBus.$on('LOGIN', this.login);
-    EventBus.$on('LOGOUT', this.logout);
+  filters: {
+    uppercase(val) {
+      return val.charAt(0).toUpperCase() + val.slice(1);
+    }
   }
 };
 </script>
