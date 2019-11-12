@@ -10,17 +10,22 @@ export default class ApiController {
     }
 
     static login(user, pass) {
-        let url = `${ApiController.host}${ApiController.api_path}login?username=${user}&password=${pass}`;
+        let url = `${ApiController.host}${ApiController.api_path}login/?username=${user}&password=${pass}`;
         return ApiController.fire(url);
     }
 
     static logout(key) {
-        let url = `${ApiController.host}${ApiController.api_path}logout`;
+        let url = `${ApiController.host}${ApiController.api_path}logout/`;
         return ApiController.fire(url, key);
     }
 
-    static fetchItems(key, model) {
-        let url = `${ApiController.host}${ApiController.api_path}${model}`;
+    static fetchModel(key, model) {
+        let url = `${ApiController.host}${ApiController.api_path}${model}/`;
+        return ApiController.fire(url, key);
+    }
+
+    static fetchModelById(key, model, id) {
+        let url = `${ApiController.host}${ApiController.api_path}${model}/${id}/`;
         return ApiController.fire(url, key);
     }
 }

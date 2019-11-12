@@ -1,3 +1,5 @@
 <template>
-    <button class="button"><slot></slot></button>
+    <button class="button" :class="{'is-loading': $store.getters.isAppBusy, 'is-static': $store.getters.isAppBusy}">
+        <slot></slot>
+    </button>
 </template>

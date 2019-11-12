@@ -1,7 +1,7 @@
 <template>
     <nav class="navbar has-background-light" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-            <router-link class="navbar-item" to="home" exact>
+            <router-link class="navbar-item" to="/home" exact>
                 <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Dog.svg" height="52">
             </router-link>
             <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false">
@@ -12,9 +12,9 @@
         </div>
         <div class="navbar-menu">
             <div class="navbar-start">
-                <router-link class="navbar-item" to="dogs" exact>Dogs</router-link>
-                <router-link class="navbar-item" to="trustees" exact>Trustees</router-link>
-                <router-link class="navbar-item" to="payments" exact>Payments</router-link>
+                <router-link class="navbar-item" to="/dog">Dogs</router-link>
+                <router-link class="navbar-item" to="/trustee">Trustees</router-link>
+                <router-link class="navbar-item" to="/payment">Payments</router-link>
             </div>
             <div class="navbar-end">
                 <a @click.prevent="logout" class="navbar-item has-text-danger">Log out</a>

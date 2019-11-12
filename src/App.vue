@@ -11,7 +11,7 @@
 import AppNotification from "@/components/Notification.vue";
 import AppHeader from "@/components/Header.vue";
 import AppFooter from "@/components/Footer.vue";
-import { mapGetters, mapMutations, mapActions } from 'vuex';
+import { mapActions } from 'vuex';
 import EventBus from '@/bus';
 
 export default {
@@ -20,10 +20,6 @@ export default {
     return {
       notifications: []
     };
-  },
-  computed: {
-    ...mapGetters(["apiKey"]),
-    ...mapGetters("dogs", ["dogs"])
   },
   methods: {
     showNotification: function({message, type}) {
@@ -38,10 +34,7 @@ export default {
     removeNotification: function(key) {
       this.notifications = this.notifications.filter(el => el.id != key);
     },
-    ...mapMutations(["setApiKey"]),
-    ...mapActions(["login", "logout"]),
-    ...mapMutations("dogs", ["setDogs"]),
-    ...mapActions("dogs", ["fetchDogs"])
+    ...mapActions(["login", "logout", "getModel", "getModelById"]),
   },
   components: {
     AppNotification,
@@ -53,7 +46,8 @@ export default {
     EventBus.$on('REMOVE_NOTIFICATION', this.removeNotification);
     EventBus.$on('LOGIN', this.login);
     EventBus.$on('LOGOUT', this.logout);
-    //EventBus.$on('FETCH_MODEL', this.fetchDogs);
+    EventBus.$on('GET_MODEL', this.getModel);
+    EventBus.$on('GET_MODEL_BY_ID', this.getModelById);
   }
 };
 </script>

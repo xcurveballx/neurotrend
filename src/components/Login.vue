@@ -24,7 +24,9 @@
                 </div>
             </div>
             <div class="field">
-                <btn @click.native="emitLoginEvent" class="is-success" :class="{'is-loading': $store.getters.isAppBusy, 'is-static': $store.getters.isAppBusy}">Login</btn>
+                <btn @click.native="emitLoginEvent" class="is-success">
+                    Login
+                </btn>
             </div>
         </div>
     </div>
