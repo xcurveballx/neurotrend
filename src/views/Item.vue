@@ -9,11 +9,11 @@
             <i class="fas fa-bug"></i> {{ errorMsg }}
         </page-message>
 
-        <payment-card v-if="currentItem.id && model == 'payment'" :payment="currentItem" />
+        <payment-card v-if="currentItem && currentItem.id && model == 'payment'" :payment="currentItem" />
 
-        <dog-card v-if="currentItem.id && model == 'dog'" :dog="currentItem" />
+        <dog-card v-if="currentItem && currentItem.id && model == 'dog'" :dog="currentItem" />
 
-        <trustee-card v-if="currentItem.id && model == 'trustee'" :trustee="currentItem" />
+        <trustee-card v-if="currentItem && currentItem.id && model == 'trustee'" :trustee="currentItem" />
     </div>
 </template>
 

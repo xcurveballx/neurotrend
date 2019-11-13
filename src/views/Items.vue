@@ -21,7 +21,7 @@
                 &nbsp;&nbsp;Add new item
             </btn>
             <br />
-            <list :ths="ths" :model="model" :items="$store.getters[`${model}/${model}`]" />
+            <list :ths="ths" :model="model" :items="$store.getters[`${model}/${model}`]" :selected="selected"/>
         </template>
     </div>
     <div class="column is-half-tablet is-one-third-desktop">
@@ -42,7 +42,8 @@ export default {
   name: "Items",
   data() {
     return {
-      ths: ['#', 'Item', 'Additional Info']
+      ths: ['#', 'Item', 'Additional Info'],
+      selected: 0
     };
   },
   props: {
@@ -67,9 +68,13 @@ export default {
   created () {
     EventBus.$emit('GET_MODEL', this.model);
   },
+  mounted () {
+    EventBus.$on('ITEM_SELECTED', index => {this.selected = index});
+  },
   beforeRouteUpdate (to, from, next) {
+    this.selected = 0;
     EventBus.$emit('GET_MODEL', to.params.model);
     next();
-  }
+  },
 };
 </script>

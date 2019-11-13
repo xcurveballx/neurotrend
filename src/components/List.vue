@@ -6,10 +6,10 @@
         </tr>
     </thead>
     <tbody>
-        <tr v-for="(item, index) in items" :key="item.id" :class="{ 'is-selected': !index }">
+        <tr v-for="(item, index) in items" :key="item.id" :class="{ 'is-selected': index == selected }">
             <th>{{ index + 1 }}</th>
             <td>
-                <router-link :to="`/${model}/${item.id}`" exact>
+                <router-link @click.native="sel(index)" :to="`/${model}/${item.id}/`" exact>
                     {{ item.name || item.purpose || item.fio }}
                 </router-link>
             </td>
@@ -22,8 +22,19 @@
 </template>
 
 <script>
+import EventBus from '@/bus';
+
 export default {
   name: "List",
+  methods: {
+    sel (index) {
+      EventBus.$emit('ITEM_SELECTED', index);
+    },
+    showFirst () {
+      if (!this.$route.params.id && !this.selected)
+        this.$router.push(`/${this.model}/${this.items[0].id}/`);
+    }
+  },
   props: {
     ths: {
       required: true,
@@ -36,7 +47,17 @@ export default {
     items: {
       required: true,
       type: Array
+    },
+    selected: {
+      required: true,
+      type: Number
     }
+  },
+  created() {
+    this.showFirst();
+  },
+  updated() {
+    this.showFirst();
   }
 };
 </script>
