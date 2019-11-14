@@ -15,10 +15,10 @@
                         Time: {{ payment.time | formatDateTime }}
                     </li>
                     <li>
-                        Trustee: {{ payment.trustee.fio }}
+                        Trustee: 
                     </li>
                     <li>
-                        Dog: {{ payment.dog.name }}
+                        Dog:
                     </li>
                 </ul>
             </div>

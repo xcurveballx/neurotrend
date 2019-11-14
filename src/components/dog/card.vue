@@ -23,7 +23,7 @@
                         Registered: {{ dog.reg_time | formatDateTime }}
                     </li>
                     <li>
-                        Trustee: {{ dog.trustee.fio }}
+                        Trustee: 
                     </li>
                 </ul>
             </div>

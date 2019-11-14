@@ -23,7 +23,10 @@ const routes = [
                 path: ":model",
                 name: "model",
                 component: Items,
-                props: true,
+                props: (route) => ({
+                    model: route.params.model,
+                    trick: + new Date()
+                }),
                 children: [
                     {
                         path: "add",
@@ -47,6 +50,13 @@ const router = new VueRouter({
     mode: "history",
     linkActiveClass: "is-active",
     base: process.env.BASE_URL,
+    scrollBehavior (to, from, savedPosition) {
+        if (savedPosition) {
+            return savedPosition;
+        } else {
+            return { selector: '.navbar' };
+        }
+    },
     routes
 });
 

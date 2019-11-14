@@ -18,6 +18,10 @@
                 </td>
             </tr>
         </tbody>
+        <tfoot class="is-hidden">
+          <!-- to make this component always update and invoke updated hook -->
+          {{ trick }}
+        </tfoot>
     </table>
 </template>
 
@@ -31,8 +35,9 @@ export default {
       EventBus.$emit('ITEM_SELECTED', index);
     },
     showFirst () {
-      if (this.$route.name != 'item' && !this.selected && this.$route.name != 'add')
+      if (!['item', 'add'].includes(this.$route.name) && !this.selected) {
         this.$router.push(`/${this.model}/${this.items[0].id}/`);
+      }
     }
   },
   props: {
@@ -51,13 +56,17 @@ export default {
     selected: {
       required: true,
       type: Number
+    },
+    trick: {
+      required: true,
+      type: Number
     }
   },
-  created() {console.log(1);
+  created() {
     this.showFirst();
   },
-  updated() {console.log(2);
+  updated() {
     this.showFirst();
-  }
+  },
 };
 </script>

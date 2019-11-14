@@ -1,8 +1,8 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import Vue from 'vue';
+import Vuex from 'vuex';
 import ApiController from './ApiController.js';
 import EventBus from '@/bus';
-import router from "@/router";
+import router from '@/router';
 import { dog } from './dog.js';
 import { payment } from './payment.js';
 import { trustee } from './trustee.js';
@@ -80,9 +80,9 @@ export default new Vuex.Store({
       if (status == 'OK' && token) {
           context.commit('setUser', user);
           context.commit('setApiKey', token);
-          router.push('/home');
+          router.push('/home/');
       } else {
-          EventBus.$emit("SHOW_NOTIFICATION", {message, 'type': 'error'});
+          EventBus.$emit('SHOW_NOTIFICATION', {message, 'type': 'error'});
       }
 
       if (context.getters.isAppBusy) {
@@ -99,9 +99,9 @@ export default new Vuex.Store({
             context.commit('setApiKey', '');
             router.push('/');
             context.commit('setUser', '');
-            EventBus.$emit("SHOW_NOTIFICATION", {message, 'type': 'success'});
+            EventBus.$emit('SHOW_NOTIFICATION', {message, 'type': 'success'});
         } else {
-            EventBus.$emit("SHOW_NOTIFICATION", {message, 'type': 'error'});
+            EventBus.$emit('SHOW_NOTIFICATION', {message, 'type': 'error'});
         }
         return Promise.resolve();
     },
@@ -114,7 +114,7 @@ export default new Vuex.Store({
         let key = context.getters.apiKey,
             resp = await ApiController.fetchModel(key, model);
 
-        // because it is "dog" in urls and "Dog" in actions' names
+        // because it is 'dog' in urls and 'Dog' in actions' names
         let modelUF = `${model[0].toUpperCase()}${model.slice(1)}`;
 
         context.commit('setIsLoading', false);
@@ -139,20 +139,10 @@ export default new Vuex.Store({
         let key = context.getters.apiKey,
             resp = await ApiController.fetchModelById(key, model, id);
 
-        if (resp && resp.dog) {
-            let dog = await ApiController.fetchModelById(key, 'dog', resp.dog);
-            resp.dog = dog;
-        }
-
-        if (resp && resp.trustee) {
-            let trustee = await ApiController.fetchModelById(key, 'trustee', resp.trustee);
-            resp.trustee = trustee;
-        }
-
         context.commit('setIsItemLoading', false);
 
         if (resp && resp.id) {
-            context.commit("setCurrentItem", resp);
+            context.commit('setCurrentItem', resp);
         } else {
             context.commit('setIsItemError', true);
             context.commit('setCurrentItem', null);

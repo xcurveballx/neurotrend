@@ -20,7 +20,7 @@
                 <i class="fas fa-plus"></i> Add new item
             </btn>
             <br />
-            <list :ths="ths" :model="model" :items="$store.getters[`${model}/${model}`]" :selected="selectedItemIndex"/>
+            <list :ths="ths" :model="model" :items="$store.getters[`${model}/${model}`]" :selected="selectedItemIndex" :trick="trick"/>
         </template>
     </div>
     <div class="column is-half-tablet is-one-third-desktop">
@@ -48,6 +48,10 @@ export default {
     model: {
       required: true,
       type: String
+    },
+    trick: {
+      required: true,
+      type: Number
     }
   },
   methods: {
