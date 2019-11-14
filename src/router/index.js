@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import Main from "../views/Main.vue";
 import Home from "../views/Home.vue";
 import Items from "../views/Items.vue";
+import ItemForm from "../views/ItemForm.vue";
 import Item from "../views/Item.vue";
 
 Vue.use(VueRouter);
@@ -25,14 +26,21 @@ const routes = [
                 props: true,
                 children: [
                     {
+                        path: "add",
+                        name: "add",
+                        component: ItemForm,
+                        props: true
+                    },
+                    {
                         path: ":id",
+                        name: "item",
                         component: Item,
                         props: true
                     }
                 ]
             }
         ]
-      },
+    },
 ];
 
 const router = new VueRouter({

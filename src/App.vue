@@ -11,7 +11,7 @@
 import AppNotification from "@/components/Notification.vue";
 import AppHeader from "@/components/Header.vue";
 import AppFooter from "@/components/Footer.vue";
-import { mapActions } from 'vuex';
+import { mapActions, mapMutations } from 'vuex';
 import EventBus from '@/bus';
 
 export default {
@@ -35,6 +35,7 @@ export default {
       this.notifications = this.notifications.filter(el => el.id != key);
     },
     ...mapActions(["login", "logout", "getModel", "getModelById"]),
+    ...mapMutations(["setSelectedItemIndex", "setIsLoading", "setIsError"])
   },
   components: {
     AppNotification,
@@ -48,6 +49,9 @@ export default {
     EventBus.$on('LOGOUT', this.logout);
     EventBus.$on('GET_MODEL', this.getModel);
     EventBus.$on('GET_MODEL_BY_ID', this.getModelById);
+    EventBus.$on('ITEM_SELECTED', this.setSelectedItemIndex);
+    EventBus.$on('SET_IS_LOADING', this.setIsLoading);
+    EventBus.$on('SET_IS_ERROR', this.setIsError);
   }
 };
 </script>

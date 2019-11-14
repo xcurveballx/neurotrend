@@ -1,24 +1,24 @@
 <template>
-<table class="table is-fullwidth is-striped is-hoverable">
-    <thead>
-        <tr>
-            <th v-for="(colName, index) in ths" :key="index">{{ colName }}</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr v-for="(item, index) in items" :key="item.id" :class="{ 'is-selected': index == selected }">
-            <th>{{ index + 1 }}</th>
-            <td>
-                <router-link @click.native="sel(index)" :to="`/${model}/${item.id}/`" exact>
-                    {{ item.name || item.purpose || item.fio }}
-                </router-link>
-            </td>
-            <td>
-                {{ item.kind ? item.kind : item.sum ? `$${item.sum}` : '-' }}
-            </td>
-        </tr>
-    </tbody>
-</table>
+    <table class="table is-fullwidth is-striped is-hoverable">
+        <thead>
+            <tr>
+                <th v-for="(colName, index) in ths" :key="index">{{ colName }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="(item, index) in items" :key="item.id" :class="{ 'is-selected': index == selected }">
+                <th>{{ index + 1 }}</th>
+                <td>
+                    <router-link @click.native="sel(index)" :to="`/${model}/${item.id}/`" exact>
+                        {{ item.name || item.purpose || item.fio }}
+                    </router-link>
+                </td>
+                <td>
+                    {{ item.kind ? item.kind : item.sum ? `$${item.sum}` : '-' }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </template>
 
 <script>
@@ -31,7 +31,7 @@ export default {
       EventBus.$emit('ITEM_SELECTED', index);
     },
     showFirst () {
-      if (!this.$route.params.id && !this.selected)
+      if (!this.$route.params.id && !this.selected && this.$route.name != 'add')
         this.$router.push(`/${this.model}/${this.items[0].id}/`);
     }
   },

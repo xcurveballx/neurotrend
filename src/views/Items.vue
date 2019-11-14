@@ -16,12 +16,11 @@
                 {{ model | plural }}
             </h1>
             <br />
-            <btn class="is-normal is-info is-outlined is-fullwidth">
-                <i class="fas fa-plus"></i>
-                &nbsp;&nbsp;Add new item
+            <btn @click.native="add" class="is-normal is-info is-outlined is-fullwidth">
+                <i class="fas fa-plus"></i> Add new item
             </btn>
             <br />
-            <list :ths="ths" :model="model" :items="$store.getters[`${model}/${model}`]" :selected="selected"/>
+            <list :ths="ths" :model="model" :items="$store.getters[`${model}/${model}`]" :selected="selectedItemIndex"/>
         </template>
     </div>
     <div class="column is-half-tablet is-one-third-desktop">
@@ -42,9 +41,8 @@ export default {
   name: "Items",
   data() {
     return {
-      ths: ['#', 'Item', 'Additional Info'],
-      selected: 0
-    };
+      ths: ['#', 'Item', 'Additional Info']
+    }
   },
   props: {
     model: {
@@ -52,13 +50,20 @@ export default {
       type: String
     }
   },
+  methods: {
+    add () {
+      if (this.$route.name == 'add') return;
+      EventBus.$emit('ITEM_SELECTED', -1);
+      EventBus.$emit('SET_IS_LOADING', false);
+      EventBus.$emit('SET_IS_ERROR', false);
+      this.$router.push(`/${this.model}/add/`);
+    }
+  },
   computed: {
-    ...mapGetters(["isLoading", "isError", "loadingMsg", "errorMsg"])
+    ...mapGetters(["isLoading", "isError", "loadingMsg", "errorMsg", "selectedItemIndex"]),
   },
   filters: {
-    plural (val) {
-      return `${val}s`;
-    }
+    plural: (val) => `${val}s`
   },
   components: {
     Btn,
@@ -68,11 +73,10 @@ export default {
   created () {
     EventBus.$emit('GET_MODEL', this.model);
   },
-  mounted () {
-    EventBus.$on('ITEM_SELECTED', index => {this.selected = index});
-  },
   beforeRouteUpdate (to, from, next) {
-    this.selected = 0;
+    if (this.selectedItemIndex != -1) {
+      EventBus.$emit('ITEM_SELECTED', 0);
+    }
     EventBus.$emit('GET_MODEL', to.params.model);
     next();
   },

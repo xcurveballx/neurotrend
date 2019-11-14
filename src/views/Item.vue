@@ -13,7 +13,7 @@
 
         <dog-card v-if="currentItem && currentItem.id && model == 'dog'" :dog="currentItem" />
 
-        <trustee-card v-if="currentItem && currentItem.id && model == 'trustee'" :trustee="currentItem" />
+        <trustee-card v-if="currentItem && currentItem.id && model == 'trustee'" :trustee="currentItem" :model="model" :id="id" />
     </div>
 </template>
 

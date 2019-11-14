@@ -20,7 +20,8 @@ export default new Vuex.Store({
     isError: false,
     currentItem: null,
     isItemLoading: true,
-    isItemError: false
+    isItemError: false,
+    selectedItemIndex: 0
   },
   getters: {
     apiKey: state => state.apiKey,
@@ -32,7 +33,8 @@ export default new Vuex.Store({
     isError: state => state.isError,
     currentItem: state => state.currentItem,
     isItemLoading: state => state.isItemLoading,
-    isItemError: state => state.isItemError
+    isItemError: state => state.isItemError,
+    selectedItemIndex: state => state.selectedItemIndex
   },
   mutations: {
     setApiKey (state, key) {
@@ -58,7 +60,10 @@ export default new Vuex.Store({
     },
     setIsItemError(state, isItemError) {
       state.isItemError = isItemError;
-    }
+    },
+    setSelectedItemIndex(state, selectedItemIndex) {
+      state.selectedItemIndex = selectedItemIndex;
+    },
   },
   actions: {
     async login (context, {user, pass}) {
@@ -135,6 +140,7 @@ export default new Vuex.Store({
             context.commit("setCurrentItem", resp);
         } else {
             context.commit('setIsItemError', true);
+            context.commit('setCurrentItem', null);
         }
 
         if (context.getters.isAppBusy) {
