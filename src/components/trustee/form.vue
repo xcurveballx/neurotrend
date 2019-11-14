@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <header class="card-header">
-            <p v-if="id == undefined" class="card-header-title">
+            <p v-if="!id" class="card-header-title">
                 Add a new {{ model }}:
             </p>
             <p v-else class="card-header-title">Edit {{ item.fio }}:</p>
@@ -10,7 +10,13 @@
             <div class="field">
                 <label class="label">Name:</label>
                 <div class="control">
-                    <input class="input" type="text" placeholder="John Smith">
+                    <input class="input" type="text" placeholder="John Smith" v-model="item.fio">
+                </div>
+            </div>
+            <div v-if="item.photo" class="field">
+                <label class="label">Current image:</label>
+                <div class="control">
+                    <input disabled class="input" type="text" placeholder="John Smith" :value="item.photo">
                 </div>
             </div>
             <div class="field">
@@ -32,15 +38,8 @@
                 </div>
             </div>
             <div class="field">
-                <label class="label">Subject</label>
-                <div class="control">
-                    <div class="select">
-                        <select>
-                            <option>Select dropdown</option>
-                            <option>With options</option>
-                        </select>
-                    </div>
-                </div>
+                <label class="label">Date of birth:</label>
+                <date-of-birth />
             </div>
         </div>
         <footer class="card-footer">
@@ -48,7 +47,7 @@
                 <btn class="is-link">Save changes</btn>
             </p>
             <p class="card-footer-item">
-                <btn @click.native="cancel">Cancel</btn>
+                <btn @click.native="toggleEdit">Cancel</btn>
             </p>
         </footer>
     </div>
@@ -56,14 +55,23 @@
 
 <script>
 import Btn from "@/components/Button.vue";
-//import { mapGetters } from 'vuex';
-//import EventBus from '@/bus';
+import DateOfBirth from "@/components/DateOfBirth.vue";
+import EventBus from '@/bus';
 
 export default {
   name: "TrusteeForm",
-  data() {
+  data () {
     return {
-      item: this.trustee
+      defaults: {
+        fio: '',
+        photo: '',
+        birth_time: null
+      }
+    }
+  },
+  computed: {
+    item() {
+      return this.trustee ? this.trustee : this.defaults
     }
   },
   props: {
@@ -72,23 +80,28 @@ export default {
       type: String
     },
     id: {
-      required: false,
-      type: String
+      required: true,
+      type: [String, Boolean]
     },
     trustee: {
-      required: false,
-      type: Object
+      required: true,
+      type: [Object, Boolean]
     }
   },
   methods: {
-    cancel () {
+    toggleEdit () {
+      if (this.id)
+        EventBus.$emit('TOGGLE_EDIT_MODE');
+      else
       this.$router.push(`/${this.model}/`);
     }
   },
-  computed: {
+  filters: {
+    formatDate: (val) => new Date(val).toLocaleDateString("en-US")
   },
   components: {
-    Btn
-  },
+    Btn,
+    DateOfBirth
+  }
 };
 </script>

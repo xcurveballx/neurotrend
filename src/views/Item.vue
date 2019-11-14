@@ -9,19 +9,19 @@
             <i class="fas fa-bug"></i> {{ errorMsg }}
         </page-message>
 
-        <payment-card v-if="currentItem && currentItem.id && model == 'payment'" :payment="currentItem" />
+        <dog v-if="currentItem && model == 'dog'" :dog="currentItem" :model="model" :id="id" :isInEditMode="isInEditMode"/>
 
-        <dog-card v-if="currentItem && currentItem.id && model == 'dog'" :dog="currentItem" />
+        <payment v-if="currentItem && model == 'payment'" :payment="currentItem" :model="model" :id="id" :isInEditMode="isInEditMode"/>
 
-        <trustee-card v-if="currentItem && currentItem.id && model == 'trustee'" :trustee="currentItem" :model="model" :id="id" />
+        <trustee v-if="currentItem && model == 'trustee'" :trustee="currentItem" :model="model" :id="id" :isInEditMode="isInEditMode"/>
     </div>
 </template>
 
 <script>
 import PageMessage from "@/components/PageMessage.vue";
-import DogCard from "@/components/cards/Dog.vue";
-import TrusteeCard from "@/components/cards/Trustee.vue";
-import PaymentCard from "@/components/cards/Payment.vue";
+import Dog from "@/components/dog/Dog.vue";
+import Payment from "@/components/payment/Payment.vue";
+import Trustee from "@/components/trustee/Trustee.vue";
 import EventBus from '@/bus';
 import { mapGetters } from 'vuex';
 
@@ -38,13 +38,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["currentItem", "isItemLoading", "isItemError", "loadingMsg", "errorMsg"])
+    ...mapGetters(["currentItem", "isItemLoading", "isItemError", "loadingMsg", "errorMsg", "isInEditMode"])
   },
   components: {
     PageMessage,
-    PaymentCard,
-    DogCard,
-    TrusteeCard
+    Dog,
+    Payment,
+    Trustee
   },
   created() {
     let payload = {
@@ -58,8 +58,17 @@ export default {
       model: to.params.model,
       id: to.params.id
     };
+    if (this.isInEditMode) {
+      EventBus.$emit('TOGGLE_EDIT_MODE');
+    }
     EventBus.$emit('GET_MODEL_BY_ID', payload);
     next();
-  }
+  },
+  beforeRouteLeave (to, from, next) {
+    if (this.isInEditMode) {
+      EventBus.$emit('TOGGLE_EDIT_MODE');
+    }
+    next();
+  },
 };
 </script>

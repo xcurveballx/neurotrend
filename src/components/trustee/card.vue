@@ -2,30 +2,26 @@
     <div class="card">
         <header class="card-header">
             <p class="card-header-title">
-                For {{ payment.purpose }}
+                {{ trustee.fio }}
             </p>
         </header>
+        <div v-if="trustee.photo" class="card-image">
+            <figure class="image">
+                <img :src="trustee.photo" :alt="trustee.fio">
+            </figure>
+        </div>
         <div class="card-content">
             <div class="content">
                 <ul>
                     <li>
-                        Sum: {{ `$${payment.sum}` }}
-                    </li>
-                    <li>
-                        Time: {{ payment.time | formatDateTime }}
-                    </li>
-                    <li>
-                        Trustee: {{ payment.trustee }}
-                    </li>
-                    <li>
-                        Dog: {{ payment.dog }}
+                        Birthday: {{ trustee.birth_time | formatDate }}
                     </li>
                 </ul>
             </div>
         </div>
         <footer class="card-footer">
             <p class="card-footer-item">
-                <btn class="is-success">Edit</btn>
+                <btn @click.native="toggleEdit" class="is-success">Edit</btn>
             </p>
             <p class="card-footer-item">
                 <btn class="is-danger">Delete</btn>
@@ -36,26 +32,31 @@
 
 <script>
 import Btn from "@/components/Button.vue";
+import EventBus from '@/bus';
 
 export default {
-  name: "PaymentCard",
+  name: "TrusteeCard",
   props: {
-    payment: {
+    model: {
+      required: true,
+      type: String
+    },
+    id: {
+      required: true,
+      type: String
+    },
+    trustee: {
       required: true,
       type: Object
     }
   },
-  filters: {
-    formatDateTime (val) {
-      let opts = {
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric'
-      };
-      return new Date(val).toLocaleDateString("en-US", opts);
+  methods: {
+    toggleEdit () {
+      EventBus.$emit('TOGGLE_EDIT_MODE');
     }
+  },
+  filters: {
+    formatDate: (val) => new Date(val).toLocaleDateString("en-US")
   },
   components: {
     Btn

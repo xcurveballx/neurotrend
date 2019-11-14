@@ -3,7 +3,7 @@ import VueRouter from "vue-router";
 import Main from "../views/Main.vue";
 import Home from "../views/Home.vue";
 import Items from "../views/Items.vue";
-import ItemForm from "../views/ItemForm.vue";
+import AddForm from "../views/AddForm.vue";
 import Item from "../views/Item.vue";
 
 Vue.use(VueRouter);
@@ -28,7 +28,7 @@ const routes = [
                     {
                         path: "add",
                         name: "add",
-                        component: ItemForm,
+                        component: AddForm,
                         props: true
                     },
                     {

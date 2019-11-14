@@ -21,7 +21,8 @@ export default new Vuex.Store({
     currentItem: null,
     isItemLoading: true,
     isItemError: false,
-    selectedItemIndex: 0
+    selectedItemIndex: 0,
+    isInEditMode: false
   },
   getters: {
     apiKey: state => state.apiKey,
@@ -34,7 +35,8 @@ export default new Vuex.Store({
     currentItem: state => state.currentItem,
     isItemLoading: state => state.isItemLoading,
     isItemError: state => state.isItemError,
-    selectedItemIndex: state => state.selectedItemIndex
+    selectedItemIndex: state => state.selectedItemIndex,
+    isInEditMode: state => state.isInEditMode
   },
   mutations: {
     setApiKey (state, key) {
@@ -63,6 +65,9 @@ export default new Vuex.Store({
     },
     setSelectedItemIndex(state, selectedItemIndex) {
       state.selectedItemIndex = selectedItemIndex;
+    },
+    toggleEditMode(state) {
+      state.isInEditMode = !state.isInEditMode;
     },
   },
   actions: {
@@ -133,6 +138,16 @@ export default new Vuex.Store({
 
         let key = context.getters.apiKey,
             resp = await ApiController.fetchModelById(key, model, id);
+
+        if (resp && resp.dog) {
+            let dog = await ApiController.fetchModelById(key, 'dog', resp.dog);
+            resp.dog = dog;
+        }
+
+        if (resp && resp.trustee) {
+            let trustee = await ApiController.fetchModelById(key, 'trustee', resp.trustee);
+            resp.trustee = trustee;
+        }
 
         context.commit('setIsItemLoading', false);
 

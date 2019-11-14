@@ -31,7 +31,7 @@ export default {
       EventBus.$emit('ITEM_SELECTED', index);
     },
     showFirst () {
-      if (!this.$route.params.id && !this.selected && this.$route.name != 'add')
+      if (this.$route.name != 'item' && !this.selected && this.$route.name != 'add')
         this.$router.push(`/${this.model}/${this.items[0].id}/`);
     }
   },
@@ -53,10 +53,10 @@ export default {
       type: Number
     }
   },
-  created() {
+  created() {console.log(1);
     this.showFirst();
   },
-  updated() {
+  updated() {console.log(2);
     this.showFirst();
   }
 };

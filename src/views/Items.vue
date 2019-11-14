@@ -80,5 +80,11 @@ export default {
     EventBus.$emit('GET_MODEL', to.params.model);
     next();
   },
+  beforeRouteLeave (to, from, next) {
+    if (this.selectedItemIndex != -1) {
+      EventBus.$emit('ITEM_SELECTED', 0);
+    }
+    next();
+  },
 };
 </script>
