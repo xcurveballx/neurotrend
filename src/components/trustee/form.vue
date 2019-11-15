@@ -39,7 +39,7 @@
             </div>
             <div class="field">
                 <label class="label">Date of birth:</label>
-                <date-time v-model="birth_time"/>
+                <date-time v-model="birth_time" :fields="{year: true, month: true, day: true}"/>
             </div>
         </div>
         <footer class="card-footer">
@@ -64,7 +64,7 @@ export default {
     return {
       fio: this.trustee.fio,
       photo: this.trustee.photo,
-      birth_time: new Date(this.trustee.birth_time) // .toISOString()
+      birth_time: new Date(this.trustee.birth_time), // .toISOString()
     }
   },
   props: {
