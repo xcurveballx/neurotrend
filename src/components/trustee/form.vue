@@ -4,19 +4,19 @@
             <p v-if="!id" class="card-header-title">
                 Add a new {{ model }}:
             </p>
-            <p v-else class="card-header-title">Edit {{ item.fio }}:</p>
+            <p v-else class="card-header-title">Edit {{ fio }}:</p>
         </header>
         <div class="card-content">
             <div class="field">
                 <label class="label">Name:</label>
                 <div class="control">
-                    <input class="input" type="text" placeholder="John Smith" v-model="item.fio">
+                    <input class="input" type="text" placeholder="John Smith" v-model="fio">
                 </div>
             </div>
-            <div v-if="item.photo" class="field">
+            <div v-if="photo" class="field">
                 <label class="label">Current image:</label>
                 <div class="control">
-                    <input disabled class="input" type="text" placeholder="John Smith" :value="item.photo">
+                    <input disabled class="input" type="text" :value="photo">
                 </div>
             </div>
             <div class="field">
@@ -39,7 +39,7 @@
             </div>
             <div class="field">
                 <label class="label">Date of birth:</label>
-                <date-of-birth />
+                <date-time v-model="birth_time"/>
             </div>
         </div>
         <footer class="card-footer">
@@ -55,23 +55,16 @@
 
 <script>
 import Btn from "@/components/Button.vue";
-import DateOfBirth from "@/components/DateOfBirth.vue";
+import DateTime from "@/components/DateTime.vue";
 import EventBus from '@/bus';
 
 export default {
   name: "TrusteeForm",
   data () {
     return {
-      defaults: {
-        fio: '',
-        photo: '',
-        birth_time: null
-      }
-    }
-  },
-  computed: {
-    item() {
-      return this.trustee ? this.trustee : this.defaults
+      fio: this.trustee.fio,
+      photo: this.trustee.photo,
+      birth_time: new Date(this.trustee.birth_time) // .toISOString()
     }
   },
   props: {
@@ -93,15 +86,12 @@ export default {
       if (this.id)
         EventBus.$emit('TOGGLE_EDIT_MODE');
       else
-      this.$router.push(`/${this.model}/`);
-    }
-  },
-  filters: {
-    formatDate: (val) => new Date(val).toLocaleDateString("en-US")
+        this.$router.push(`/${this.model}/`);
+    },
   },
   components: {
     Btn,
-    DateOfBirth
+    DateTime
   }
 };
 </script>

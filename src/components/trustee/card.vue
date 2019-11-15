@@ -55,9 +55,6 @@ export default {
       EventBus.$emit('TOGGLE_EDIT_MODE');
     }
   },
-  filters: {
-    formatDate: (val) => new Date(val).toLocaleDateString("en-US")
-  },
   components: {
     Btn
   }

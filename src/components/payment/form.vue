@@ -87,9 +87,6 @@ export default {
       this.$router.push(`/${this.model}/`);
     }
   },
-  filters: {
-    formatDate: (val) => new Date(val).toLocaleDateString("en-US")
-  },
   components: {
     Btn
   }

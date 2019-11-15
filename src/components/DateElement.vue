@@ -1,0 +1,28 @@
+<template>
+    <div class="select">
+        <select :value="value" @input="$emit('input', +$event.target.value)">
+            <option>{{ name }}</option>
+            <option v-for="elem in elems" :key="elem">{{ elem }}</option>
+        </select>
+    </div>
+</template>
+
+<script>
+export default {
+  name: "DateElement",
+  props: {
+    elems: {
+      required: true,
+      type: [Array, Number]
+    },
+    name: {
+      required: true,
+      type: String
+    },
+    value: {
+      required: true,
+      type: Number
+    }
+  },
+};
+</script>

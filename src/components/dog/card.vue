@@ -23,7 +23,7 @@
                         Registered: {{ dog.reg_time | formatDateTime }}
                     </li>
                     <li>
-                        Trustee: 
+                        Trustee:
                     </li>
                 </ul>
             </div>
@@ -63,19 +63,6 @@ export default {
     toggleEdit () {
       EventBus.$emit('TOGGLE_EDIT_MODE');
     }
-  },
-  filters: {
-    formatDate: (val) => new Date(val).toLocaleDateString("en-US"),
-    formatDateTime (val) {
-      let opts = {
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric'
-      };
-      return new Date(val).toLocaleDateString("en-US", opts);
-    },
   },
   components: {
     Btn
