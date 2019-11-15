@@ -12,7 +12,7 @@
                         Sum: {{ `$${payment.sum}` }}
                     </li>
                     <li>
-                        Time: {{ payment.time | formatDateTime }}
+                        Time: {{ payment.time | formatDateTimeRU }}
                     </li>
                     <li>
                         Trustee:

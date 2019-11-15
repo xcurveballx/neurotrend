@@ -14,7 +14,7 @@
             <div class="content">
                 <ul>
                     <li>
-                        Birthday: {{ trustee.birth_time | formatDate }}
+                        Birthday: {{ trustee.birth_time | formatDateRU }}
                     </li>
                 </ul>
             </div>

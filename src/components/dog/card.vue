@@ -14,13 +14,13 @@
             <div class="content">
                 <ul>
                     <li>
-                        Birthday: {{ dog.birth_time | formatDate }}
+                        Birthday: {{ dog.birth_time | formatDateRU }}
                     </li>
                     <li>
                         Kind: {{ dog.kind }}
                     </li>
                     <li>
-                        Registered: {{ dog.reg_time | formatDateTime }}
+                        Registered: {{ dog.reg_time | formatDateTimeRU }}
                     </li>
                     <li>
                         Trustee:
