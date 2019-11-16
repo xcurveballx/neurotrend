@@ -19,10 +19,10 @@ export default {
     }
   },
   methods: {
-    remove (id) {
+    remove(id) {
       EventBus.$emit("REMOVE_NOTIFICATION", id);
     },
-    ifToAddClass (notificationType, classType) {
+    ifToAddClass(notificationType, classType) {
       return notificationType === classType;
     }
   }

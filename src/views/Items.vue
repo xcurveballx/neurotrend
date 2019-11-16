@@ -55,7 +55,7 @@ export default {
     }
   },
   methods: {
-    add () {
+    add() {
       if (this.$route.name == 'add') return;
       EventBus.$emit('ITEM_SELECTED', -1);
       EventBus.$emit('SET_IS_LOADING', false);
@@ -66,18 +66,15 @@ export default {
   computed: {
     ...mapGetters(["isLoading", "isError", "loadingMsg", "errorMsg", "selectedItemIndex"]),
   },
-  filters: {
-    plural: (val) => `${val}s`
-  },
   components: {
     Btn,
     PageMessage,
     List
   },
-  created () {
+  created() {
     EventBus.$emit('GET_MODEL', this.model);
   },
-  beforeRouteUpdate (to, from, next) {
+  beforeRouteUpdate(to, from, next) {
     if (this.selectedItemIndex != -1) {
       EventBus.$emit('ITEM_SELECTED', 0);
     }

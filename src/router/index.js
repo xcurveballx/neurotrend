@@ -50,7 +50,7 @@ const router = new VueRouter({
     mode: "history",
     linkActiveClass: "is-active",
     base: process.env.BASE_URL,
-    scrollBehavior (to, from, savedPosition) {
+    scrollBehavior(to, from, savedPosition) {
         if (savedPosition) {
             return savedPosition;
         } else {

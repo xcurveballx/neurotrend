@@ -31,10 +31,10 @@ import EventBus from '@/bus';
 export default {
   name: "List",
   methods: {
-    sel (index) {
+    sel(index) {
       EventBus.$emit('ITEM_SELECTED', index);
     },
-    showFirst () {
+    showFirst() {
       if (!['item', 'add'].includes(this.$route.name) && !this.selected) {
         this.$router.push(`/${this.model}/${this.items[0].id}/`);
       }

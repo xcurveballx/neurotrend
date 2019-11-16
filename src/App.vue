@@ -42,7 +42,7 @@ export default {
     AppHeader,
     AppFooter
   },
-  mounted () {
+  mounted() {
     EventBus.$on('SHOW_NOTIFICATION', this.showNotification);
     EventBus.$on('REMOVE_NOTIFICATION', this.removeNotification);
     EventBus.$on('LOGIN', this.login);

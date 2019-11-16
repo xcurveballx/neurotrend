@@ -28,18 +28,18 @@ export default {
   name: "DateTime",
   data () {
     return {
-      hours: this.value.getHours(),
-      minutes: this.value.getMinutes(),
-      seconds: this.value.getSeconds(),
-      day: this.value.getDate(),
-      month: this.value.getMonth() + 1,
-      year: this.value.getFullYear(),
+      hours: this.value && this.value.getHours() || 0,
+      minutes: this.value && this.value.getMinutes() || 0,
+      seconds: this.value && this.value.getSeconds() || 0,
+      day: this.value && this.value.getDate() || -1,
+      month: this.value && this.value.getMonth() + 1 || -1,
+      year: this.value && this.value.getFullYear() || -1,
     }
   },
   props: {
     value: {
       required: true,
-      type: Date
+      type: [Date, Boolean]
     },
     fields: {
       required: true,
@@ -47,14 +47,14 @@ export default {
     }
   },
   methods: {
-    years (y) {
+    years(y) {
       let years = [];
       for(let year = y; year <= (new Date).getFullYear(); year++)
           years.push(year);
 
       return years;
     },
-    emit (val, lapse) {
+    emit(val, lapse) {
       this[lapse] = val;
       this.$emit('input', new Date(this.year, this.month - 1, this.day, this.hours, this.minutes, this.seconds));
     }

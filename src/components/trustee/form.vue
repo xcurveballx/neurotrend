@@ -60,11 +60,12 @@ import EventBus from '@/bus';
 
 export default {
   name: "TrusteeForm",
-  data () {
+  data() {
     return {
-      fio: this.trustee.fio,
-      photo: this.trustee.photo,
-      birth_time: new Date(this.trustee.birth_time), // .toISOString()
+      fio: this.trustee && this.trustee.fio || '',
+      photo: this.trustee && this.trustee.photo || '',
+      birth_time: this.trustee && new Date(this.trustee.birth_time),
+      // .toISOString()
     }
   },
   props: {
@@ -82,7 +83,7 @@ export default {
     }
   },
   methods: {
-    toggleEdit () {
+    toggleEdit() {
       if (this.id)
         EventBus.$emit('TOGGLE_EDIT_MODE');
       else

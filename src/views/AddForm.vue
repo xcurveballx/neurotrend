@@ -42,7 +42,7 @@ export default {
     PaymentForm,
     PageMessage
   },
-  beforeRouteLeave (to, from, next) {
+  beforeRouteLeave(to, from, next) {
     EventBus.$emit('ITEM_SELECTED', 0);
     next();
   }

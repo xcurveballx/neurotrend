@@ -53,7 +53,7 @@ export default {
     };
     EventBus.$emit('GET_MODEL_BY_ID', payload);
   },
-  beforeRouteUpdate (to, from, next) {
+  beforeRouteUpdate(to, from, next) {
     let payload = {
       model: to.params.model,
       id: to.params.id
@@ -64,7 +64,7 @@ export default {
     EventBus.$emit('GET_MODEL_BY_ID', payload);
     next();
   },
-  beforeRouteLeave (to, from, next) {
+  beforeRouteLeave(to, from, next) {
     if (this.isInEditMode) {
       EventBus.$emit('TOGGLE_EDIT_MODE');
     }

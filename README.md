@@ -1,5 +1,8 @@
 # neurotrend testing task
 
+(Backend repo)[https://gitlab.com/sys_neurotrend/dogs]
+(Task)[https://docs.google.com/document/d/1dh85x4GZEHIwiDRcoDBaRGPHwdpDjG2UCJFs2IMsiag/edit#] 
+
 ## Project setup
 ```
 npm install
