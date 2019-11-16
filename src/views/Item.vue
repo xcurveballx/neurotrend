@@ -68,6 +68,7 @@ export default {
     if (this.isInEditMode) {
       EventBus.$emit('TOGGLE_EDIT_MODE');
     }
+    EventBus.$emit('CLEAR_CURRENT_ITEM', null);
     next();
   },
 };

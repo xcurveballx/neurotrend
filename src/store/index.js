@@ -39,13 +39,13 @@ export default new Vuex.Store({
     isInEditMode: state => state.isInEditMode
   },
   mutations: {
-    setApiKey (state, key) {
+    setApiKey(state, key) {
       state.apiKey = key;
     },
-    setAppBusy (state, isAppBusy) {
+    setAppBusy(state, isAppBusy) {
       state.isAppBusy = isAppBusy;
     },
-    setUser (state, name) {
+    setUser(state, name) {
       state.user = name;
     },
     setIsLoading(state, isLoading) {
@@ -71,7 +71,7 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    async login (context, {user, pass}) {
+    async login(context, {user, pass}) {
       if (context.getters.isAppBusy || !user || !pass) return;
       context.commit('setAppBusy', true);
 
@@ -92,7 +92,7 @@ export default new Vuex.Store({
       return Promise.resolve();
     },
 
-    async logout (context) {
+    async logout(context) {
         let {status = '', message = 'Something went wrong :('} = await ApiController.logout(context.getters.apiKey);
 
         if (status == 'OK') {
@@ -106,7 +106,7 @@ export default new Vuex.Store({
         return Promise.resolve();
     },
 
-    async getModel (context, model) {
+    async getModel(context, model) {
         if (context.getters.isAppBusy || !model) return;
         if (context.getters[`${model}/${model}`]) return;
         context.commit('setAppBusy', true);
@@ -132,13 +132,32 @@ export default new Vuex.Store({
         return Promise.resolve();
     },
 
-    async getModelById (context, {model, id}) {
+    async getModelById(context, {model, id}) {
         if (context.getters.isAppBusy || !model || !id) return;
         context.commit('setAppBusy', true);
-
-        let key = context.getters.apiKey,
+try {
+        var key = context.getters.apiKey,
             resp = await ApiController.fetchModelById(key, model, id);
 
+        // logout & redirect to main page if session was destroyed
+        if (!resp.ok && [401, 403].includes(resp.status)) {
+            context.commit('setApiKey', '');
+            router.push('/');
+            context.commit('setUser', '');
+            EventBus.$emit('SHOW_NOTIFICATION', {message: resp.statusText, 'type': 'error'});
+        }
+
+        // if the model has dependencies, go get them!
+        if (resp && resp.dog) {
+            resp.dog = await ApiController.fetchModelById(key, 'dog', resp.dog);
+        }
+
+        if (resp && resp.trustee) {
+            resp.trustee = await ApiController.fetchModelById(key, 'trustee', resp.trustee);
+        }
+} catch(e) {
+    console.log(e); // works only the request had physical troubles
+}
         context.commit('setIsItemLoading', false);
 
         if (resp && resp.id) {

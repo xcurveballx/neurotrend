@@ -6,7 +6,10 @@ export default class ApiController {
         if (!url) return;
         let defauls = key ? {headers: {'Authorization': `Token ${key}`}} : {};
         let options = opts ? Object.assign(defauls, opts) : defauls;
-        return fetch(url, options).then(response => response.json());
+        return fetch(url, options).then(response => {
+            if (!response.ok) return response;
+            return response.json();
+        });
     }
 
     static login(user, pass) {
