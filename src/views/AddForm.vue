@@ -44,6 +44,7 @@ export default {
   },
   beforeRouteLeave(to, from, next) {
     EventBus.$emit('ITEM_SELECTED', 0);
+    EventBus.$emit('HIDE_MENU_ON_MOB');
     next();
   }
 };

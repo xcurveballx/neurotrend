@@ -35,7 +35,7 @@ export default {
       this.notifications = this.notifications.filter(el => el.id != key);
     },
     ...mapActions(["login", "logout", "getModel", "getModelById"]),
-    ...mapMutations(["setSelectedItemIndex", "setIsLoading", "setIsError", "toggleEditMode", "setCurrentItem"])
+    ...mapMutations(["setSelectedItemIndex", "setIsLoading", "setIsError", "toggleEditMode", "setCurrentItem", "toggleIsMenuShownOnMob", "clearIsMenuShownOnMob"])
   },
   components: {
     AppNotification,
@@ -54,6 +54,8 @@ export default {
     EventBus.$on('SET_IS_ERROR', this.setIsError);
     EventBus.$on('TOGGLE_EDIT_MODE', this.toggleEditMode);
     EventBus.$on('CLEAR_CURRENT_ITEM', this.setCurrentItem);
+    EventBus.$on('TOGGLE_MENU_ON_MOB', this.toggleIsMenuShownOnMob);
+    EventBus.$on('HIDE_MENU_ON_MOB', this.clearIsMenuShownOnMob);
   }
 };
 </script>

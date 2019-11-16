@@ -78,6 +78,7 @@ export default {
     if (this.selectedItemIndex != -1) {
       EventBus.$emit('ITEM_SELECTED', 0);
     }
+    EventBus.$emit('HIDE_MENU_ON_MOB');
     EventBus.$emit('GET_MODEL', to.params.model);
     next();
   },
@@ -85,6 +86,7 @@ export default {
     if (this.selectedItemIndex != -1) {
       EventBus.$emit('ITEM_SELECTED', 0);
     }
+    EventBus.$emit('HIDE_MENU_ON_MOB');
     next();
   },
 };

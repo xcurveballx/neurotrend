@@ -22,7 +22,8 @@ export default new Vuex.Store({
     isItemLoading: true,
     isItemError: false,
     selectedItemIndex: 0,
-    isInEditMode: false
+    isInEditMode: false,
+    isMenuShownOnMob: false
   },
   getters: {
     apiKey: state => state.apiKey,
@@ -36,7 +37,8 @@ export default new Vuex.Store({
     isItemLoading: state => state.isItemLoading,
     isItemError: state => state.isItemError,
     selectedItemIndex: state => state.selectedItemIndex,
-    isInEditMode: state => state.isInEditMode
+    isInEditMode: state => state.isInEditMode,
+    isMenuShownOnMob: state => state.isMenuShownOnMob
   },
   mutations: {
     setApiKey(state, key) {
@@ -68,6 +70,12 @@ export default new Vuex.Store({
     },
     toggleEditMode(state) {
       state.isInEditMode = !state.isInEditMode;
+    },
+    toggleIsMenuShownOnMob(state) {
+      state.isMenuShownOnMob = !state.isMenuShownOnMob;
+    },
+    clearIsMenuShownOnMob(state) {
+      if (state.isMenuShownOnMob) state.isMenuShownOnMob = false;
     },
   },
   actions: {

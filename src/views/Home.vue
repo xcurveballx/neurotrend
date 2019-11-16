@@ -6,6 +6,7 @@
 
 <script>
 import PageMessage from "@/components/PageMessage.vue";
+import EventBus from '@/bus';
 
 export default {
   name: "Home",
@@ -17,5 +18,9 @@ export default {
   components: {
     PageMessage
   },
+  beforeRouteLeave(to, from, next) {
+    EventBus.$emit('HIDE_MENU_ON_MOB');
+    next();
+  }
 };
 </script>

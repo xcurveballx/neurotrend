@@ -61,6 +61,7 @@ export default {
     if (this.isInEditMode) {
       EventBus.$emit('TOGGLE_EDIT_MODE');
     }
+    EventBus.$emit('HIDE_MENU_ON_MOB');
     EventBus.$emit('GET_MODEL_BY_ID', payload);
     next();
   },
@@ -69,6 +70,7 @@ export default {
       EventBus.$emit('TOGGLE_EDIT_MODE');
     }
     EventBus.$emit('CLEAR_CURRENT_ITEM', null);
+    EventBus.$emit('HIDE_MENU_ON_MOB');
     next();
   },
 };
