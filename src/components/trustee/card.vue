@@ -24,7 +24,7 @@
                 <btn @click.native="toggleEdit" class="is-success">Edit</btn>
             </p>
             <p class="card-footer-item">
-                <btn class="is-danger">Delete</btn>
+                <btn @click.native="remove" class="is-danger">Delete</btn>
             </p>
         </footer>
     </div>
@@ -53,6 +53,15 @@ export default {
   methods: {
     toggleEdit () {
       EventBus.$emit('TOGGLE_EDIT_MODE');
+    },
+    remove () {
+      let ans = window.confirm("Are you sure that you want to delete this item?");
+      if (ans) {
+        let payload = {};
+        payload.model = this.model;
+        payload.id = this.id;
+        EventBus.$emit('REMOVE_MODEL_BY_ID', payload);
+      }
     }
   },
   components: {

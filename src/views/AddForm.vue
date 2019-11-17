@@ -9,11 +9,11 @@
             <i class="fas fa-bug"></i> {{ errorMsg }}
         </page-message>
 
-        <trustee-form v-if="model == 'trustee'" :model="model" :id="false" :trustee="false"/>
+        <trustee-form v-if="!isItemLoading && !isItemError && model == 'trustee'" :model="model" :id="false" :trustee="false"/>
 
-        <dog-form v-if="model == 'dog'" :model="model" :id="false" :dog="false"/>
+        <dog-form v-if="!isItemLoading && !isItemError && model == 'dog'" :model="model" :id="false" :dog="false"/>
 
-        <payment-form v-if="model == 'payment'" :model="model" :id="false" :payment="false"/>
+        <payment-form v-if="!isItemLoading && !isItemError && model == 'payment'" :model="model" :id="false" :payment="false"/>
     </div>
 </template>
 
@@ -45,6 +45,7 @@ export default {
   beforeRouteLeave(to, from, next) {
     EventBus.$emit('ITEM_SELECTED', 0);
     EventBus.$emit('HIDE_MENU_ON_MOB');
+    EventBus.$emit('CLEAR_VALIDATION_ERRORS');
     next();
   }
 };

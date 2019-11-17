@@ -34,8 +34,8 @@ export default {
     removeNotification: function(key) {
       this.notifications = this.notifications.filter(el => el.id != key);
     },
-    ...mapActions(["login", "logout", "getModel", "getModelById"]),
-    ...mapMutations(["setSelectedItemIndex", "setIsLoading", "setIsError", "toggleEditMode", "setCurrentItem", "toggleIsMenuShownOnMob", "clearIsMenuShownOnMob"])
+    ...mapActions(["login", "logout", "getModel", "getModelById", "updateModel", "createModel", "removeModelById"]),
+    ...mapMutations(["setSelectedItemIndex", "setIsLoading", "setIsError", "toggleEditMode", "setCurrentItem", "toggleIsMenuShownOnMob", "clearIsMenuShownOnMob", "setValidationErrors"])
   },
   components: {
     AppNotification,
@@ -49,6 +49,9 @@ export default {
     EventBus.$on('LOGOUT', this.logout);
     EventBus.$on('GET_MODEL', this.getModel);
     EventBus.$on('GET_MODEL_BY_ID', this.getModelById);
+    EventBus.$on('UPDATE_MODEL', this.updateModel);
+    EventBus.$on('CREATE_MODEL', this.createModel);
+    EventBus.$on('REMOVE_MODEL_BY_ID', this.removeModelById);
     EventBus.$on('ITEM_SELECTED', this.setSelectedItemIndex);
     EventBus.$on('SET_IS_LOADING', this.setIsLoading);
     EventBus.$on('SET_IS_ERROR', this.setIsError);
@@ -56,6 +59,7 @@ export default {
     EventBus.$on('CLEAR_CURRENT_ITEM', this.setCurrentItem);
     EventBus.$on('TOGGLE_MENU_ON_MOB', this.toggleIsMenuShownOnMob);
     EventBus.$on('HIDE_MENU_ON_MOB', this.clearIsMenuShownOnMob);
+    EventBus.$on('CLEAR_VALIDATION_ERRORS', this.setValidationErrors);
   }
 };
 </script>

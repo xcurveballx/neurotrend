@@ -23,7 +23,8 @@ export default new Vuex.Store({
     isItemError: false,
     selectedItemIndex: 0,
     isInEditMode: false,
-    isMenuShownOnMob: false
+    isMenuShownOnMob: false,
+    validationErrors: {}
   },
   getters: {
     apiKey: state => state.apiKey,
@@ -38,7 +39,8 @@ export default new Vuex.Store({
     isItemError: state => state.isItemError,
     selectedItemIndex: state => state.selectedItemIndex,
     isInEditMode: state => state.isInEditMode,
-    isMenuShownOnMob: state => state.isMenuShownOnMob
+    isMenuShownOnMob: state => state.isMenuShownOnMob,
+    validationErrors: state => state.validationErrors
   },
   mutations: {
     setApiKey(state, key) {
@@ -76,6 +78,12 @@ export default new Vuex.Store({
     },
     clearIsMenuShownOnMob(state) {
       if (state.isMenuShownOnMob) state.isMenuShownOnMob = false;
+    },
+    setValidationErrors(state, validationErrors) {
+      if (validationErrors)
+        state.validationErrors = validationErrors;
+      else
+        state.validationErrors = {};
     },
   },
   actions: {
@@ -171,6 +179,154 @@ try {
         if (resp && resp.id) {
             context.commit('setCurrentItem', resp);
         } else {
+            context.commit('setIsItemError', true);
+            context.commit('setCurrentItem', null);
+        }
+
+        if (context.getters.isAppBusy) {
+            context.commit('setAppBusy', false);
+        }
+
+        return Promise.resolve();
+    },
+
+    async updateModel(context, {model, id, data}) {
+        if (context.getters.isAppBusy || !model || !id || !data) return;
+        context.commit('setAppBusy', true);
+
+        try {
+            var key = context.getters.apiKey,
+                resp = await ApiController.updateModel(key, model, id, data);
+
+            if (!resp.ok && [401, 403].includes(resp.status)) {
+
+                // logout & redirect to main page if session was destroyed
+                context.commit('setApiKey', '');
+                router.push('/');
+                context.commit('setUser', '');
+                EventBus.$emit('SHOW_NOTIFICATION', {message: resp.statusText, 'type': 'error'});
+
+            } else if (!resp.ok && [400].includes(resp.status)) {
+
+                // wrong data format
+                EventBus.$emit('SHOW_NOTIFICATION', {message: resp.statusText, 'type': 'error'});
+                context.commit('setValidationErrors', await resp.json());
+
+            } else {
+
+                if (resp && resp.id) {
+
+                    let modelUF = `${model[0].toUpperCase()}${model.slice(1)}`;
+                    context.commit('setCurrentItem', resp);
+                    context.commit('setValidationErrors');
+                    context.commit('toggleEditMode');
+                    context.commit(`${model}/update${modelUF}`, resp);
+                    EventBus.$emit('SHOW_NOTIFICATION', {message: 'Item has been successfully updated!', 'type': 'success'});
+
+                } else {
+
+                    context.commit('setIsItemError', true);
+                    context.commit('setCurrentItem', null);
+
+                }
+
+            }
+        } catch(e) {
+            context.commit('setIsItemError', true);
+            context.commit('setCurrentItem', null);
+        }
+
+        if (context.getters.isAppBusy) {
+            context.commit('setAppBusy', false);
+        }
+
+        return Promise.resolve();
+    },
+
+    async createModel(context, {model, data}) {
+        if (context.getters.isAppBusy || !model) return;
+        context.commit('setAppBusy', true);
+
+        try {
+            var key = context.getters.apiKey,
+                resp = await ApiController.createModel(key, model, data);
+
+            if (!resp.ok && [401, 403].includes(resp.status)) {
+
+                // logout & redirect to main page if session was destroyed
+                context.commit('setApiKey', '');
+                router.push('/');
+                context.commit('setUser', '');
+                EventBus.$emit('SHOW_NOTIFICATION', {message: resp.statusText, 'type': 'error'});
+
+            } else if (!resp.ok && [400].includes(resp.status)) {
+
+                // wrong data format
+                EventBus.$emit('SHOW_NOTIFICATION', {message: resp.statusText, 'type': 'error'});
+                context.commit('setValidationErrors', await resp.json());
+
+            } else {
+
+                if (resp && resp.id) {
+
+                    let modelUF = `${model[0].toUpperCase()}${model.slice(1)}`;
+                    context.commit('setValidationErrors');
+                    context.commit(`${model}/add${modelUF}`, resp);
+                    EventBus.$emit('SHOW_NOTIFICATION', {message: 'Item has been successfully added!', 'type': 'success'});
+                    router.push(`/${model}/${resp.id}/`);
+
+                } else {
+
+                    context.commit('setIsItemError', true);
+                    context.commit('setCurrentItem', null);
+
+                }
+
+            }
+        } catch(e) {
+            context.commit('setIsItemError', true);
+            context.commit('setCurrentItem', null);
+        }
+
+        if (context.getters.isAppBusy) {
+            context.commit('setAppBusy', false);
+        }
+
+        return Promise.resolve();
+    },
+
+    async removeModelById(context, {model, id}) {
+        if (context.getters.isAppBusy || !model || !id) return;
+        context.commit('setAppBusy', true);
+
+        try {
+            var key = context.getters.apiKey,
+                resp = await ApiController.deleteModel(key, model, id);
+
+            if (!resp.ok && [401, 403].includes(resp.status)) {
+
+                // logout & redirect to main page if session was destroyed
+                context.commit('setApiKey', '');
+                router.push('/');
+                context.commit('setUser', '');
+                EventBus.$emit('SHOW_NOTIFICATION', {message: resp.statusText, 'type': 'error'});
+
+            } else if (resp && resp.status == 204) {
+
+                    let modelUF = `${model[0].toUpperCase()}${model.slice(1)}`;
+                    context.commit(`${model}/remove${modelUF}`, id);
+                    EventBus.$emit('SHOW_NOTIFICATION', {message: 'Item has been successfully removed!', 'type': 'success'});
+                    router.push(`/${model}/`);
+
+            } else {
+
+                    context.commit('setIsItemError', true);
+                    context.commit('setCurrentItem', null);
+
+            }
+
+        } catch(e) {
+            console.log(e);
             context.commit('setIsItemError', true);
             context.commit('setCurrentItem', null);
         }

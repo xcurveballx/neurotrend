@@ -9,7 +9,7 @@
             <i class="fas fa-bug"></i> {{ errorMsg }}
         </page-message>
 
-        <dog v-if="currentItem && model == 'dog'" :dog="currentItem" :model="model" :id="id" :isInEditMode="isInEditMode"/>
+        <dog v-if="!isItemLoading && !isItemError && currentItem && model == 'dog'" :dog="currentItem" :model="model" :id="id" :isInEditMode="isInEditMode"/>
 
         <payment v-if="currentItem && model == 'payment'" :payment="currentItem" :model="model" :id="id" :isInEditMode="isInEditMode"/>
 
@@ -63,6 +63,7 @@ export default {
     }
     EventBus.$emit('HIDE_MENU_ON_MOB');
     EventBus.$emit('GET_MODEL_BY_ID', payload);
+    EventBus.$emit('CLEAR_VALIDATION_ERRORS');
     next();
   },
   beforeRouteLeave(to, from, next) {
@@ -71,6 +72,7 @@ export default {
     }
     EventBus.$emit('CLEAR_CURRENT_ITEM', null);
     EventBus.$emit('HIDE_MENU_ON_MOB');
+    EventBus.$emit('CLEAR_VALIDATION_ERRORS');
     next();
   },
 };

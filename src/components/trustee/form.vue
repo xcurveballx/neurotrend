@@ -9,9 +9,15 @@
         <div class="card-content">
             <div class="field">
                 <label class="label">Name:</label>
-                <div class="control">
-                    <input class="input" type="text" placeholder="John Smith" v-model="fio">
+                <div class="control has-icons-right">
+                    <input class="input" :class="{'is-danger': validationErrors.fio}" type="text" placeholder="John Smith" v-model="fio">
+                    <span v-if="validationErrors.fio" class="icon is-small is-right">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </span>
                 </div>
+                <p v-if="validationErrors.fio" class="help is-danger">
+                    {{ String(validationErrors.fio) }}
+                </p>
             </div>
             <div v-if="photo" class="field">
                 <label class="label">Current image:</label>
@@ -20,31 +26,17 @@
                 </div>
             </div>
             <div class="field">
-                <label class="label">Image:</label>
-                <div class="control">
-                    <div class="file">
-                        <label class="file-label">
-                            <input class="file-input" type="file" name="image">
-                            <span class="file-cta">
-                                <span class="file-icon">
-                                    <i class="fas fa-upload"></i>
-                                </span>
-                                <span class="file-label">
-                                    Choose an image
-                                </span>
-                            </span>
-                        </label>
-                    </div>
-                </div>
+                <label class="label">Photo:</label>
+                <file-input v-model="new_photo" />
             </div>
             <div class="field">
                 <label class="label">Date of birth:</label>
-                <date-time v-model="birth_time" :fields="{year: true, month: true, day: true}"/>
+                <date-time v-model="birth_time" :fields="{year: true, month: true, day: true}" :error="validationErrors.birth_time"/>
             </div>
         </div>
         <footer class="card-footer">
             <p class="card-footer-item">
-                <btn class="is-link">Save changes</btn>
+                <btn @click.native="save" class="is-link">Save changes</btn>
             </p>
             <p class="card-footer-item">
                 <btn @click.native="toggleEdit">Cancel</btn>
@@ -56,6 +48,8 @@
 <script>
 import Btn from "@/components/Button.vue";
 import DateTime from "@/components/DateTime.vue";
+import FileInput from "@/components/FileInput.vue";
+import { mapGetters } from 'vuex';
 import EventBus from '@/bus';
 
 export default {
@@ -65,8 +59,11 @@ export default {
       fio: this.trustee && this.trustee.fio || '',
       photo: this.trustee && this.trustee.photo || '',
       birth_time: this.trustee && new Date(this.trustee.birth_time),
-      // .toISOString()
+      new_photo: ''
     }
+  },
+  computed: {
+    ...mapGetters(["validationErrors"])
   },
   props: {
     model: {
@@ -84,15 +81,34 @@ export default {
   },
   methods: {
     toggleEdit() {
-      if (this.id)
+      if (this.id) {
         EventBus.$emit('TOGGLE_EDIT_MODE');
-      else
+        EventBus.$emit('CLEAR_VALIDATION_ERRORS');
+      } else {
         this.$router.push(`/${this.model}/`);
+      }
     },
+    save() {
+      let formData = new FormData();
+      if (this.fio) formData.append("fio", this.fio);
+      if (this.birth_time) formData.append("birth_time", this.birth_time.toISOString());
+      if (this.new_photo) formData.append("photo", this.new_photo, this.new_photo.name);
+
+      let payload = {};
+      if (this.model) payload.model = this.model;
+      if (this.id) payload.id = this.id;
+      payload.data = formData;
+
+      if (payload.id)
+        EventBus.$emit('UPDATE_MODEL', payload);
+      else
+        EventBus.$emit('CREATE_MODEL', payload);
+    }
   },
   components: {
     Btn,
-    DateTime
+    DateTime,
+    FileInput
   }
 };
 </script>
