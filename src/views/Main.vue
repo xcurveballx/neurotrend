@@ -8,9 +8,9 @@ import Guest from "@/components/Guest.vue";
 import Welcome from "@/components/Welcome.vue";
 
 export default {
-  components: {
-    Welcome,
-    Guest
-  }
+    components: {
+        Welcome,
+        Guest
+    }
 };
 </script>

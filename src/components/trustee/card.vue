@@ -35,37 +35,37 @@ import Btn from "@/components/Button.vue";
 import EventBus from '@/bus';
 
 export default {
-  name: "TrusteeCard",
-  props: {
-    model: {
-      required: true,
-      type: String
+    name: "TrusteeCard",
+    props: {
+        model: {
+            required: true,
+            type: String
+        },
+        id: {
+            required: true,
+            type: String
+        },
+        trustee: {
+            required: true,
+            type: Object
+        }
     },
-    id: {
-      required: true,
-      type: String
+    methods: {
+        toggleEdit () {
+            EventBus.$emit('TOGGLE_EDIT_MODE');
+        },
+        remove () {
+            let ans = window.confirm("Are you sure that you want to delete this item?");
+            if (ans) {
+                let payload = {};
+                payload.model = this.model;
+                payload.id = this.id;
+                EventBus.$emit('REMOVE_MODEL_BY_ID', payload);
+            }
+        }
     },
-    trustee: {
-      required: true,
-      type: Object
+    components: {
+        Btn
     }
-  },
-  methods: {
-    toggleEdit () {
-      EventBus.$emit('TOGGLE_EDIT_MODE');
-    },
-    remove () {
-      let ans = window.confirm("Are you sure that you want to delete this item?");
-      if (ans) {
-        let payload = {};
-        payload.model = this.model;
-        payload.id = this.id;
-        EventBus.$emit('REMOVE_MODEL_BY_ID', payload);
-      }
-    }
-  },
-  components: {
-    Btn
-  }
 };
 </script>

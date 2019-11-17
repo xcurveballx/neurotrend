@@ -13,9 +13,9 @@
 import Navigation from "@/components/Navigation.vue";
 
 export default {
-  name: "Welcome",
-  components: {
-    Navigation
-  }
+    name: "Welcome",
+    components: {
+        Navigation
+    }
 };
 </script>

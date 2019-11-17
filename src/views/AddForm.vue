@@ -26,27 +26,27 @@ import { mapGetters } from 'vuex';
 import EventBus from '@/bus';
 
 export default {
-  name: "AddForm",
-  props: {
-    model: {
-      required: true,
-      type: String
+    name: "AddForm",
+    props: {
+      model: {
+          required: true,
+          type: String
+      }
+    },
+    computed: {
+        ...mapGetters(["isItemLoading", "isItemError", "loadingMsg", "errorMsg"])
+    },
+    components: {
+        TrusteeForm,
+        DogForm,
+        PaymentForm,
+        PageMessage
+    },
+    beforeRouteLeave(to, from, next) {
+        EventBus.$emit('ITEM_SELECTED', 0);
+        EventBus.$emit('HIDE_MENU_ON_MOB');
+        EventBus.$emit('CLEAR_VALIDATION_ERRORS');
+        next();
     }
-  },
-  computed: {
-    ...mapGetters(["isItemLoading", "isItemError", "loadingMsg", "errorMsg"])
-  },
-  components: {
-    TrusteeForm,
-    DogForm,
-    PaymentForm,
-    PageMessage
-  },
-  beforeRouteLeave(to, from, next) {
-    EventBus.$emit('ITEM_SELECTED', 0);
-    EventBus.$emit('HIDE_MENU_ON_MOB');
-    EventBus.$emit('CLEAR_VALIDATION_ERRORS');
-    next();
-  }
 };
 </script>

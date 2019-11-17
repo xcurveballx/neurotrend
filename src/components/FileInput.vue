@@ -18,25 +18,25 @@
 
 <script>
 export default {
-  name: "FileInput",
-  props: {
-    value: {
-      required: true,
-      type: [File, String]
-    }
-  },
-  methods: {
-    addPhoto(event) {
-      let input = event.target,
-          image = input.files.length ? input.files[0] : '',
-          name = image.name,
-          size = (image.size / 1000).toFixed(1),
-          description = image && `${name}, (${size} Кб)`;
+    name: "FileInput",
+    props: {
+        value: {
+            required: true,
+            type: [File, String]
+        }
+    },
+    methods: {
+        addPhoto(event) {
+            let input = event.target,
+                image = input.files.length ? input.files[0] : '',
+                name = image.name,
+                size = (image.size / 1000).toFixed(1),
+                description = image && `${name}, (${size} Кб)`;
 
-      input.nextElementSibling.lastElementChild.innerText = !image ? 'Choose an image' : description;
+            input.nextElementSibling.lastElementChild.innerText = !image ? 'Choose an image' : description;
 
-      this.$emit('input', image);
+            this.$emit('input', image);
+        }
     }
-  }
 };
 </script>

@@ -38,28 +38,28 @@ import InputValMess from "@/components/InputValidationMessage.vue";
 import EventBus from '@/bus';
 
 export default {
-  name: "Login",
-  data() {
-    return {
-      user: '',
-      pass: '',
-      hasBeenSubmitted: false
+    name: "Login",
+    data() {
+        return {
+            user: '',
+            pass: '',
+            hasBeenSubmitted: false
+        }
+    },
+    components: {
+        Btn,
+        InputValMess
+    },
+    methods: {
+        emitLoginEvent() {
+            this.hasBeenSubmitted = true;
+            if (!this.user || !this.pass) return;
+            let payload = {
+                user: this.user,
+                pass: this.pass
+            };
+            EventBus.$emit('LOGIN', payload);
+        }
     }
-  },
-  components: {
-    Btn,
-    InputValMess
-  },
-  methods: {
-    emitLoginEvent() {
-      this.hasBeenSubmitted = true;
-      if (!this.user || !this.pass) return;
-      let payload = {
-        user: this.user,
-        pass: this.pass
-      };
-      EventBus.$emit('LOGIN', payload);
-    }
-  }
 };
 </script>

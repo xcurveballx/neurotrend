@@ -19,20 +19,20 @@
 
 <script>
 export default {
-  name: "DateElement",
-  props: {
-    elems: {
-      required: true,
-      type: [Array, Number]
+    name: "DateElement",
+    props: {
+        elems: {
+            required: true,
+            type: [Array, Number]
+        },
+        name: {
+            required: true,
+            type: String
+        },
+        value: {
+            required: true,
+            type: Number
+        }
     },
-    name: {
-      required: true,
-      type: String
-    },
-    value: {
-      required: true,
-      type: Number
-    }
-  },
 };
 </script>

@@ -17,20 +17,20 @@
 import EventBus from '@/bus';
 
 export default {
-  name: "Notification",
-  props: {
-    notifications: {
-      required: true,
-      type: Array
-    }
-  },
-  methods: {
-    remove(id) {
-      EventBus.$emit("REMOVE_NOTIFICATION", id);
+    name: "Notification",
+    props: {
+        notifications: {
+            required: true,
+            type: Array
+        }
     },
-    ifToAddClass(notificationType, classType) {
-      return notificationType === classType;
+    methods: {
+        remove(id) {
+            EventBus.$emit("REMOVE_NOTIFICATION", id);
+        },
+        ifToAddClass(notificationType, classType) {
+            return notificationType === classType;
+        }
     }
-  }
 };
 </script>

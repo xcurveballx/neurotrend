@@ -8,28 +8,28 @@ import TrusteeForm from "@/components/trustee/form.vue";
 import TrusteeCard from "@/components/trustee/card.vue";
 
 export default {
-  name: "Trustee",
-  props: {
-    model: {
-      required: true,
-      type: String
+    name: "Trustee",
+    props: {
+        model: {
+            required: true,
+            type: String
+        },
+        id: {
+            required: true,
+            type: String
+        },
+        trustee: {
+            required: true,
+            type: Object
+        },
+        isInEditMode: {
+            required: true,
+            type: Boolean
+        }
     },
-    id: {
-      required: true,
-      type: String
-    },
-    trustee: {
-      required: true,
-      type: Object
-    },
-    isInEditMode: {
-      required: true,
-      type: Boolean
+    components: {
+        TrusteeForm,
+        TrusteeCard
     }
-  },
-  components: {
-    TrusteeForm,
-    TrusteeCard
-  }
 };
 </script>

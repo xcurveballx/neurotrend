@@ -28,17 +28,17 @@ import { mapGetters } from 'vuex';
 import EventBus from '@/bus';
 
 export default {
-  name: "Navigation",
-  methods: {
-    logout() {
-      EventBus.$emit('LOGOUT');
+    name: "Navigation",
+    methods: {
+        logout() {
+            EventBus.$emit('LOGOUT');
+        },
+        toogleOnMobile() {
+            EventBus.$emit('TOGGLE_MENU_ON_MOB');
+        }
     },
-    toogleOnMobile() {
-      EventBus.$emit('TOGGLE_MENU_ON_MOB');
-    }
-  },
-  computed: {
-    ...mapGetters(["isMenuShownOnMob"])
-  },
+    computed: {
+        ...mapGetters(["isMenuShownOnMob"])
+    },
 };
 </script>

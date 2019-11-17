@@ -29,44 +29,44 @@
 import EventBus from '@/bus';
 
 export default {
-  name: "List",
-  methods: {
-    sel(index) {
-      EventBus.$emit('ITEM_SELECTED', index);
+    name: "List",
+    methods: {
+        sel(index) {
+            EventBus.$emit('ITEM_SELECTED', index);
+        },
+        showFirst() {
+            if (!['item', 'add'].includes(this.$route.name) && !this.selected) {
+                this.$router.push(`/${this.model}/${this.items[0].id}/`);
+            }
+        }
     },
-    showFirst() {
-      if (!['item', 'add'].includes(this.$route.name) && !this.selected) {
-        this.$router.push(`/${this.model}/${this.items[0].id}/`);
-      }
-    }
-  },
-  props: {
-    ths: {
-      required: true,
-      type: Array
+    props: {
+        ths: {
+            required: true,
+            type: Array
+        },
+        model: {
+            required: true,
+            type: String
+        },
+        items: {
+            required: true,
+            type: Array
+        },
+        selected: {
+            required: true,
+            type: Number
+        },
+        trick: {
+            required: true,
+            type: Number
+        }
     },
-    model: {
-      required: true,
-      type: String
+    created() {
+        this.showFirst();
     },
-    items: {
-      required: true,
-      type: Array
+    updated() {
+        this.showFirst();
     },
-    selected: {
-      required: true,
-      type: Number
-    },
-    trick: {
-      required: true,
-      type: Number
-    }
-  },
-  created() {
-    this.showFirst();
-  },
-  updated() {
-    this.showFirst();
-  },
 };
 </script>

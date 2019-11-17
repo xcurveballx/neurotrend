@@ -53,62 +53,62 @@ import { mapGetters } from 'vuex';
 import EventBus from '@/bus';
 
 export default {
-  name: "TrusteeForm",
-  data() {
-    return {
-      fio: this.trustee && this.trustee.fio || '',
-      photo: this.trustee && this.trustee.photo || '',
-      birth_time: this.trustee && new Date(this.trustee.birth_time) || new Date(0),
-      new_photo: ''
-    }
-  },
-  computed: {
-    ...mapGetters(["validationErrors"])
-  },
-  props: {
-    model: {
-      required: true,
-      type: String
+    name: "TrusteeForm",
+    data() {
+        return {
+            fio: this.trustee && this.trustee.fio || '',
+            photo: this.trustee && this.trustee.photo || '',
+            birth_time: this.trustee && new Date(this.trustee.birth_time) || new Date(0),
+            new_photo: ''
+        }
     },
-    id: {
-      required: true,
-      type: [String, Boolean]
+    computed: {
+        ...mapGetters(["validationErrors"])
     },
-    trustee: {
-      required: true,
-      type: [Object, Boolean]
-    }
-  },
-  methods: {
-    toggleEdit() {
-      if (this.id) {
-        EventBus.$emit('TOGGLE_EDIT_MODE');
-        EventBus.$emit('CLEAR_VALIDATION_ERRORS');
-      } else {
-        this.$router.push(`/${this.model}/`);
-      }
+    props: {
+        model: {
+            required: true,
+            type: String
+        },
+        id: {
+            required: true,
+            type: [String, Boolean]
+        },
+        trustee: {
+            required: true,
+            type: [Object, Boolean]
+        }
     },
-    save() {
-      let formData = new FormData();
-      if (this.fio) formData.append("fio", this.fio);
-      if (this.birth_time) formData.append("birth_time", this.birth_time.toISOString());
-      if (this.new_photo) formData.append("photo", this.new_photo, this.new_photo.name);
+    methods: {
+        toggleEdit() {
+            if (this.id) {
+                EventBus.$emit('TOGGLE_EDIT_MODE');
+                EventBus.$emit('CLEAR_VALIDATION_ERRORS');
+            } else {
+                this.$router.push(`/${this.model}/`);
+            }
+        },
+        save() {
+            let formData = new FormData();
+            if (this.fio) formData.append("fio", this.fio);
+            if (this.birth_time) formData.append("birth_time", this.birth_time.toISOString());
+            if (this.new_photo) formData.append("photo", this.new_photo, this.new_photo.name);
 
-      let payload = {};
-      if (this.model) payload.model = this.model;
-      if (this.id) payload.id = this.id;
-      payload.data = formData;
+            let payload = {};
+            if (this.model) payload.model = this.model;
+            if (this.id) payload.id = this.id;
+            payload.data = formData;
 
-      if (payload.id)
-        EventBus.$emit('UPDATE_MODEL', payload);
-      else
-        EventBus.$emit('CREATE_MODEL', payload);
+            if (payload.id)
+                EventBus.$emit('UPDATE_MODEL', payload);
+            else
+                EventBus.$emit('CREATE_MODEL', payload);
+        }
+    },
+    components: {
+        Btn,
+        DateTime,
+        FileInput
     }
-  },
-  components: {
-    Btn,
-    DateTime,
-    FileInput
-  }
 };
 </script>
