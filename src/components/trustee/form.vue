@@ -58,7 +58,7 @@ export default {
     return {
       fio: this.trustee && this.trustee.fio || '',
       photo: this.trustee && this.trustee.photo || '',
-      birth_time: this.trustee && new Date(this.trustee.birth_time),
+      birth_time: this.trustee && new Date(this.trustee.birth_time) || new Date(0),
       new_photo: ''
     }
   },

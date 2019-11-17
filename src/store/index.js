@@ -273,7 +273,7 @@ try {
                     context.commit('setValidationErrors');
                     context.commit(`${model}/add${modelUF}`, resp);
                     EventBus.$emit('SHOW_NOTIFICATION', {message: 'Item has been successfully added!', 'type': 'success'});
-                    router.push(`/${model}/${resp.id}/`);
+                    router.push(`/${model}/`);
 
                 } else {
 

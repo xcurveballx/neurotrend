@@ -1,5 +1,4 @@
 <template>
-    <div>
     <div class="control">
         <date-element v-if="fields.day" :value="day" :class="{'is-danger': error}" @input="emit($event, 'day')" name="day" :elems="31"/>/&nbsp;
 
@@ -14,10 +13,10 @@
         </template>
 
         <date-element v-if="fields.minutes" :value="minutes" :class="{'is-danger': error}" @input="emit($event, 'minutes')" name="minutes" :elems="60"/>&nbsp;
-    </div>
-    <p v-if="error" class="help is-danger">
-        {{ String(error) }}
-    </p>
+
+        <p v-if="error" class="help is-danger">
+            {{ String(error) }}
+        </p>
     </div>
 </template>
 
@@ -28,18 +27,18 @@ export default {
   name: "DateTime",
   data () {
     return {
-      hours: this.value && this.value.getHours() || 0,
-      minutes: this.value && this.value.getMinutes() || 0,
-      seconds: this.value && this.value.getSeconds() || 0,
-      day: this.value && this.value.getDate() || -1,
-      month: this.value && this.value.getMonth() + 1 || -1,
-      year: this.value && this.value.getFullYear() || -1,
+      hours: this.value && this.value.getHours(),
+      minutes: this.value && this.value.getMinutes(),
+      seconds: this.value && this.value.getSeconds(),
+      day: this.value && this.value.getDate(),
+      month: this.value && this.value.getMonth() + 1,
+      year: this.value && this.value.getFullYear(),
     }
   },
   props: {
     value: {
       required: true,
-      type: [Date, Boolean]
+      type: Date
     },
     fields: {
       required: true,
