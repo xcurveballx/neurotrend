@@ -36,20 +36,7 @@
                 <date-time v-model="birth_time" :fields="{year: true, month: true, day: true}" :error="validationErrors.birth_time"/>
             </div>
 
-            <div class="field">
-                <label class="label">Trustee:</label>
-                <div class="control">
-                    <div class="select">
-                        <select v-model="trustee">
-                            <optgroup label="trustees">
-                                <option v-for="item in $store.getters['trustee/trustee']" :value="item.id" :key="item.id">
-                                    {{ item.fio }}
-                                </option>
-                            </optgroup>
-                        </select>
-                    </div>
-                </div>
-            </div>
+            <select-list label="Trustee" fieldName="fio" v-model="trustee" :items="$store.getters['trustee/trustee']"/>
         </div>
         <footer class="card-footer">
             <p class="card-footer-item">
@@ -67,6 +54,7 @@ import Btn from "@/components/Button.vue";
 import DateTime from "@/components/DateTime.vue";
 import FileInput from "@/components/FileInput.vue";
 import InputVal from "@/components/InputWithValidation.vue";
+import SelectList from "@/components/SelectList.vue";
 import { mapGetters } from 'vuex';
 import EventBus from '@/bus';
 
@@ -131,7 +119,8 @@ export default {
         Btn,
         DateTime,
         FileInput,
-        InputVal
+        InputVal,
+        SelectList
     }
 };
 </script>

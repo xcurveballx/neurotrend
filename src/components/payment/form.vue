@@ -24,35 +24,9 @@
                 <date-time v-model="time" :fields="{year: true, month: true, day: true, hours: true, minutes: true}" :error="validationErrors.time"/>
             </div>
 
-            <div class="field">
-                <label class="label">From trustee:</label>
-                <div class="control">
-                    <div class="select">
-                        <select v-model="trustee">
-                            <optgroup label="trustees">
-                                <option v-for="item in $store.getters['trustee/trustee']" :value="item.id" :key="item.id">
-                                    {{ item.fio }}
-                                </option>
-                            </optgroup>
-                        </select>
-                    </div>
-                </div>
-            </div>
+            <select-list label="Trustee" fieldName="fio" v-model="trustee" :items="$store.getters['trustee/trustee']"/>
 
-            <div class="field">
-                <label class="label">For dog:</label>
-                <div class="control">
-                    <div class="select">
-                        <select v-model="dog">
-                            <optgroup label="dogs">
-                                <option v-for="item in $store.getters['dog/dog']" :value="item.id" :key="item.id">
-                                    {{ item.name }}
-                                </option>
-                            </optgroup>
-                        </select>
-                    </div>
-                </div>
-            </div>
+            <select-list label="Dog" fieldName="name" v-model="dog" :items="$store.getters['dog/dog']"/>
         </div>
         <footer class="card-footer">
             <p class="card-footer-item">
@@ -69,6 +43,7 @@
 import Btn from "@/components/Button.vue";
 import DateTime from "@/components/DateTime.vue";
 import InputVal from "@/components/InputWithValidation.vue";
+import SelectList from "@/components/SelectList.vue";
 import { mapGetters } from 'vuex';
 import EventBus from '@/bus';
 
@@ -131,7 +106,8 @@ export default {
     components: {
         Btn,
         DateTime,
-        InputVal
+        InputVal,
+        SelectList
     }
 };
 </script>
