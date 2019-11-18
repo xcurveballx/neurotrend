@@ -13,12 +13,7 @@
                 </span>
             </input-val>
 
-            <div v-if="photo" class="field">
-                <label class="label">Current image:</label>
-                <div class="control">
-                    <input disabled class="input" type="text" :value="photo">
-                </div>
-            </div>
+            <current-image v-if="photo" :photo="photo"/>
 
             <div class="field">
                 <label class="label">Photo:</label>
@@ -46,6 +41,7 @@ import Btn from "@/components/Button.vue";
 import DateTime from "@/components/DateTime.vue";
 import FileInput from "@/components/FileInput.vue";
 import InputVal from "@/components/InputWithValidation.vue";
+import CurrentImage from "@/components/CurrentImage.vue";
 import { mapGetters } from 'vuex';
 import EventBus from '@/bus';
 
@@ -106,7 +102,8 @@ export default {
         Btn,
         DateTime,
         FileInput,
-        InputVal
+        InputVal,
+        CurrentImage
     }
 };
 </script>
