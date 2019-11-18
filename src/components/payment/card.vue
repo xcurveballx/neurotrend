@@ -15,10 +15,10 @@
                         Time: {{ payment.time | formatDateTimeRU }}
                     </li>
                     <li>
-                        Trustee: {{ payment.trustee.fio }}
+                        Trustee: {{ trustee }}
                     </li>
                     <li>
-                        Dog: {{ payment.dog.name }}
+                        Dog: {{ dog }}
                     </li>
                 </ul>
             </div>
@@ -28,7 +28,7 @@
                 <btn @click.native="toggleEdit" class="is-success">Edit</btn>
             </p>
             <p class="card-footer-item">
-                <btn class="is-danger">Delete</btn>
+                <btn @click.native="remove" class="is-danger">Delete</btn>
             </p>
         </footer>
     </div>
@@ -39,28 +39,45 @@ import Btn from "@/components/Button.vue";
 import EventBus from '@/bus';
 
 export default {
-  name: "PaymentCard",
-  props: {
-    model: {
-      required: true,
-      type: String
+    name: "PaymentCard",
+    computed: {
+        trustee: function () {
+            return this.payment.trustee ? this.payment.trustee.fio : 'not assigned';
+        },
+        dog: function () {
+            return this.payment.dog ? this.payment.dog.name : 'not assigned';
+        }
     },
-    id: {
-      required: true,
-      type: String
+    props: {
+        model: {
+            required: true,
+            type: String
+        },
+        id: {
+            required: true,
+            type: String
+        },
+        payment: {
+            required: true,
+            type: Object
+        }
     },
-    payment: {
-      required: true,
-      type: Object
+    methods: {
+        toggleEdit () {
+            EventBus.$emit('TOGGLE_EDIT_MODE');
+        },
+        remove () {
+            let ans = window.confirm("Are you sure that you want to delete this item?");
+            if (ans) {
+                let payload = {};
+                payload.model = this.model;
+                payload.id = this.id;
+                EventBus.$emit('REMOVE_MODEL_BY_ID', payload);
+            }
+        }
+    },
+    components: {
+        Btn
     }
-  },
-  methods: {
-    toggleEdit () {
-      EventBus.$emit('TOGGLE_EDIT_MODE');
-    }
-  },
-  components: {
-    Btn
-  }
 };
 </script>
