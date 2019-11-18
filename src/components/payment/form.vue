@@ -19,10 +19,7 @@
                 </span>
             </input-val>
 
-            <div class="field">
-                <label class="label">Time:</label>
-                <date-time v-model="time" :fields="{year: true, month: true, day: true, hours: true, minutes: true}" :error="validationErrors.time"/>
-            </div>
+            <date-time label="Time" v-model="time" :fields="{year: true, month: true, day: true, hours: true, minutes: true}" :error="validationErrors.time"/>
 
             <select-list label="Trustee" fieldName="fio" v-model="trustee" :items="$store.getters['trustee/trustee']"/>
 

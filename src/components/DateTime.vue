@@ -1,22 +1,21 @@
 <template>
-    <div class="control">
-        <date-element v-if="fields.day" :value="day" :class="{'is-danger': error}" @input="emit($event, 'day')" name="day" :elems="31"/>/&nbsp;
+    <div class="field">
+        <label class="label">{{ label }}:</label>
+        <div class="control">
+            <date-element v-if="fields.day" :value="day" @input="emit($event, 'day')" name="day" :elems="31"/>/&nbsp;
 
-        <date-element v-if="fields.month" :value="month" :class="{'is-danger': error}" @input="emit($event, 'month')" name="month" :elems="12"/>/&nbsp;
+            <date-element v-if="fields.month" :value="month" @input="emit($event, 'month')" name="month" :elems="12"/>/&nbsp;
 
-        <date-element v-if="fields.year" :value="year" :class="{'is-danger': error}" @input="emit($event, 'year')" name="year" :elems="years(1900)"/><br/>
+            <date-element v-if="fields.year" :value="year" @input="emit($event, 'year')" name="year" :elems="years(1900)"/><br/>
 
-        <date-element v-if="fields.hours" :value="hours" :class="{'is-danger': error}" @input="emit($event, 'hours')" name="hours" :elems="24"/>
+            <date-element v-if="fields.hours" :value="hours" @input="emit($event, 'hours')" name="hours" :elems="24"/>
 
-        <template v-if="fields.hours && fields.minutes">
-            &nbsp;:&nbsp;
-        </template>
+            <template v-if="fields.hours && fields.minutes">
+                &nbsp;:&nbsp;
+            </template>
 
-        <date-element v-if="fields.minutes" :value="minutes" :class="{'is-danger': error}" @input="emit($event, 'minutes')" name="minutes" :elems="60"/>&nbsp;
-
-        <p v-if="error" class="help is-danger">
-            {{ String(error) }}
-        </p>
+            <date-element v-if="fields.minutes" :value="minutes" @input="emit($event, 'minutes')" name="minutes" :elems="60"/>&nbsp;
+        </div>
     </div>
 </template>
 
@@ -44,9 +43,9 @@ export default {
             required: true,
             type: Object
         },
-        error: {
-            required: false,
-            type: Array
+        label: {
+            required: true,
+            type: String
         }
     },
     methods: {

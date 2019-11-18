@@ -20,10 +20,7 @@
                 <file-input v-model="new_photo" />
             </div>
 
-            <div class="field">
-                <label class="label">Date of birth:</label>
-                <date-time v-model="birth_time" :fields="{year: true, month: true, day: true}" :error="validationErrors.birth_time"/>
-            </div>
+            <date-time label="Date of birth" v-model="birth_time" :fields="{year: true, month: true, day: true}" :error="validationErrors.birth_time"/>
         </div>
         <footer class="card-footer">
             <p class="card-footer-item">
