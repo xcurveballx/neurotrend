@@ -15,9 +15,9 @@
                         <i class="fas fa-exclamation-triangle"></i>
                     </span>
                 </div>
-                <p v-if="validationErrors.name" class="help is-danger">
+                <input-val-mess v-if="validationErrors.name">
                     {{ String(validationErrors.name) }}
-                </p>
+                </input-val-mess>
             </div>
             <div class="field">
                 <label class="label">Kind:</label>
@@ -27,9 +27,9 @@
                         <i class="fas fa-exclamation-triangle"></i>
                     </span>
                 </div>
-                <p v-if="validationErrors.kind" class="help is-danger">
+                <input-val-mess v-if="validationErrors.kind">
                     {{ String(validationErrors.kind) }}
-                </p>
+                </input-val-mess>
             </div>
             <div v-if="photo" class="field">
                 <label class="label">Current image:</label>
@@ -75,6 +75,7 @@
 import Btn from "@/components/Button.vue";
 import DateTime from "@/components/DateTime.vue";
 import FileInput from "@/components/FileInput.vue";
+import InputValMess from "@/components/InputValidationMessage.vue";
 import { mapGetters } from 'vuex';
 import EventBus from '@/bus';
 
@@ -138,7 +139,8 @@ export default {
     components: {
         Btn,
         DateTime,
-        FileInput
+        FileInput,
+        InputValMess
     }
 };
 </script>
