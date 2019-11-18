@@ -7,44 +7,35 @@
             <p v-else class="card-header-title">Edit {{ name }}:</p>
         </header>
         <div class="card-content">
-            <div class="field">
-                <label class="label">Name:</label>
-                <div class="control has-icons-right">
-                    <input class="input" :class="{'is-danger': validationErrors.name}" type="text" placeholder="Buddy" v-model="name">
-                    <span v-if="validationErrors.name" class="icon is-small is-right">
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </span>
-                </div>
-                <input-val-mess v-if="validationErrors.name">
-                    {{ String(validationErrors.name) }}
-                </input-val-mess>
-            </div>
-            <div class="field">
-                <label class="label">Kind:</label>
-                <div class="control has-icons-right">
-                    <input class="input" :class="{'is-danger': validationErrors.kind}" type="text" placeholder="Shepherd" v-model="kind">
-                    <span v-if="validationErrors.kind" class="icon is-small is-right">
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </span>
-                </div>
-                <input-val-mess v-if="validationErrors.kind">
-                    {{ String(validationErrors.kind) }}
-                </input-val-mess>
-            </div>
+            <input-val label="Name" placeholder="e.g. Buddy" :condition="!!validationErrors.name" v-model="name" :msg="validationErrors.name">
+                <span class="icon is-small is-left">
+                    <i class="fas fa-tag"></i>
+                </span>
+            </input-val>
+
+            <input-val label="Kind" placeholder="e.g. Shepherd" :condition="!!validationErrors.kind" v-model="kind" :msg="validationErrors.kind">
+                <span class="icon is-small is-left">
+                    <i class="fas fa-dog"></i>
+                </span>
+            </input-val>
+
             <div v-if="photo" class="field">
                 <label class="label">Current image:</label>
                 <div class="control">
                     <input disabled class="input" type="text" :value="photo">
                 </div>
             </div>
+
             <div class="field">
                 <label class="label">Photo:</label>
                 <file-input v-model="new_photo" />
             </div>
+
             <div class="field">
                 <label class="label">Date of birth:</label>
                 <date-time v-model="birth_time" :fields="{year: true, month: true, day: true}" :error="validationErrors.birth_time"/>
             </div>
+
             <div class="field">
                 <label class="label">Trustee:</label>
                 <div class="control">
@@ -75,7 +66,7 @@
 import Btn from "@/components/Button.vue";
 import DateTime from "@/components/DateTime.vue";
 import FileInput from "@/components/FileInput.vue";
-import InputValMess from "@/components/InputValidationMessage.vue";
+import InputVal from "@/components/InputWithValidation.vue";
 import { mapGetters } from 'vuex';
 import EventBus from '@/bus';
 
@@ -140,7 +131,7 @@ export default {
         Btn,
         DateTime,
         FileInput,
-        InputValMess
+        InputVal
     }
 };
 </script>

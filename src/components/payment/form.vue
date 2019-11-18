@@ -7,34 +7,23 @@
             <p v-else class="card-header-title">Edit payment #{{ id }}:</p>
         </header>
         <div class="card-content">
-            <div class="field">
-                <label class="label">Purpose:</label>
-                <div class="control has-icons-right">
-                    <input class="input" :class="{'is-danger': validationErrors.purpose}" type="text" placeholder="Food" v-model="purpose">
-                    <span v-if="validationErrors.purpose" class="icon is-small is-right">
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </span>
-                </div>
-                <input-val-mess v-if="validationErrors.purpose">
-                    {{ String(validationErrors.purpose) }}
-                </input-val-mess>
-            </div>
-            <div class="field">
-                <label class="label">Sum:</label>
-                <div class="control has-icons-right">
-                    <input class="input" :class="{'is-danger': validationErrors.sum}" type="text" placeholder="1000" v-model="sum">
-                    <span v-if="validationErrors.sum" class="icon is-small is-right">
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </span>
-                </div>
-                <input-val-mess v-if="validationErrors.sum">
-                    {{ String(validationErrors.sum) }}
-                </input-val-mess>
-            </div>
+            <input-val label="Purpose" placeholder="e.g. Food" :condition="!!validationErrors.purpose" v-model="purpose" :msg="validationErrors.purpose">
+                <span class="icon is-small is-left">
+                    <i class="fas fa-hands-helping"></i>
+                </span>
+            </input-val>
+
+            <input-val label="Sum" placeholder="e.g. 1000" :condition="!!validationErrors.sum" v-model="sum" :msg="validationErrors.sum">
+                <span class="icon is-small is-left">
+                    <i class="fas fa-dollar-sign"></i>
+                </span>
+            </input-val>
+
             <div class="field">
                 <label class="label">Time:</label>
                 <date-time v-model="time" :fields="{year: true, month: true, day: true, hours: true, minutes: true}" :error="validationErrors.time"/>
             </div>
+
             <div class="field">
                 <label class="label">From trustee:</label>
                 <div class="control">
@@ -49,6 +38,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="field">
                 <label class="label">For dog:</label>
                 <div class="control">
@@ -78,7 +68,7 @@
 <script>
 import Btn from "@/components/Button.vue";
 import DateTime from "@/components/DateTime.vue";
-import InputValMess from "@/components/InputValidationMessage.vue";
+import InputVal from "@/components/InputWithValidation.vue";
 import { mapGetters } from 'vuex';
 import EventBus from '@/bus';
 
@@ -87,7 +77,7 @@ export default {
     data() {
         return {
             purpose: this.payment && this.payment.purpose || '',
-            sum: this.payment && this.payment.sum || 0,
+            sum: this.payment && this.payment.sum + '' || '0',
             time: this.payment && new Date(this.payment.time) || new Date(0),
             trustee: this.payment && this.payment.trustee && this.payment.trustee.id || 0,
             dog: this.payment && this.payment.dog && this.payment.dog.id || 0
@@ -141,7 +131,7 @@ export default {
     components: {
         Btn,
         DateTime,
-        InputValMess
+        InputVal
     }
 };
 </script>

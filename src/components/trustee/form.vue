@@ -7,28 +7,24 @@
             <p v-else class="card-header-title">Edit {{ fio }}:</p>
         </header>
         <div class="card-content">
-            <div class="field">
-                <label class="label">Name:</label>
-                <div class="control has-icons-right">
-                    <input class="input" :class="{'is-danger': validationErrors.fio}" type="text" placeholder="John Smith" v-model="fio">
-                    <span v-if="validationErrors.fio" class="icon is-small is-right">
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </span>
-                </div>
-                <input-val-mess v-if="validationErrors.fio">
-                    {{ String(validationErrors.fio) }}
-                </input-val-mess>
-            </div>
+            <input-val label="Name" placeholder="e.g. John Smith" :condition="!!validationErrors.fio" v-model="fio" :msg="validationErrors.fio">
+                <span class="icon is-small is-left">
+                    <i class="fas fa-user-tie"></i>
+                </span>
+            </input-val>
+
             <div v-if="photo" class="field">
                 <label class="label">Current image:</label>
                 <div class="control">
                     <input disabled class="input" type="text" :value="photo">
                 </div>
             </div>
+
             <div class="field">
                 <label class="label">Photo:</label>
                 <file-input v-model="new_photo" />
             </div>
+
             <div class="field">
                 <label class="label">Date of birth:</label>
                 <date-time v-model="birth_time" :fields="{year: true, month: true, day: true}" :error="validationErrors.birth_time"/>
@@ -49,7 +45,7 @@
 import Btn from "@/components/Button.vue";
 import DateTime from "@/components/DateTime.vue";
 import FileInput from "@/components/FileInput.vue";
-import InputValMess from "@/components/InputValidationMessage.vue";
+import InputVal from "@/components/InputWithValidation.vue";
 import { mapGetters } from 'vuex';
 import EventBus from '@/bus';
 
@@ -110,7 +106,7 @@ export default {
         Btn,
         DateTime,
         FileInput,
-        InputValMess
+        InputVal
     }
 };
 </script>

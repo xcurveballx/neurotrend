@@ -266,7 +266,7 @@ export default new Vuex.Store({
                         }
                     }
                 }
-                
+
                 if (resp && resp.id) {
                     let modelUF = `${model[0].toUpperCase()}${model.slice(1)}`;
                     context.commit('setCurrentItem', resp);
