@@ -1,3 +1,3 @@
 <template>
-    <span class="has-text-danger"><slot></slot></span>
+    <p class="help is-danger"><slot></slot></p>
 </template>

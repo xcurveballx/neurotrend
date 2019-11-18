@@ -3,25 +3,31 @@
         <div class="box">
             <div class="field">
                 <label class="label">Username</label>
-                <div class="control has-icons-left">
+                <div class="control has-icons-left has-icons-right">
                     <input type="text" placeholder="e.g. Username" class="input" :class="{'is-danger': !user && hasBeenSubmitted}" v-model="user" @keyup.enter="emitLoginEvent">
                     <span class="icon is-small is-left">
                     <i class="fa fa-user"></i></span>
-                    <input-val-mess v-show="!user && hasBeenSubmitted">
-                        You must enter your user name!
-                    </input-val-mess>
+                    <span v-show="!user && hasBeenSubmitted" class="icon is-small is-right">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </span>
                 </div>
+                <input-val-mess v-show="!user && hasBeenSubmitted">
+                    You must enter your user name!
+                </input-val-mess>
             </div>
             <div class="field">
                 <label class="label">Password</label>
-                <div class="control has-icons-left">
+                <div class="control has-icons-left has-icons-right">
                     <input type="password" placeholder="******" class="input" :class="{'is-danger': !pass && hasBeenSubmitted}" v-model="pass" @keyup.enter="emitLoginEvent">
                     <span class="icon is-small is-left">
                     <i class="fa fa-lock"></i></span>
-                    <input-val-mess v-show="!pass && hasBeenSubmitted">
-                        You must enter your password!
-                    </input-val-mess>
+                    <span v-show="!pass && hasBeenSubmitted" class="icon is-small is-right">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </span>
                 </div>
+                <input-val-mess v-show="!pass && hasBeenSubmitted">
+                    You must enter your password!
+                </input-val-mess>
             </div>
             <div class="field">
                 <btn @click.native="emitLoginEvent" class="is-success">
