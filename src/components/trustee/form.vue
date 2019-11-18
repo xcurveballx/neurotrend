@@ -15,10 +15,7 @@
 
             <current-image v-if="photo" :photo="photo"/>
 
-            <div class="field">
-                <label class="label">Photo:</label>
-                <file-input v-model="new_photo" />
-            </div>
+            <file-input label="Photo" v-model="new_photo" />
 
             <date-time label="Date of birth" v-model="birth_time" :fields="{year: true, month: true, day: true}" :error="validationErrors.birth_time"/>
         </div>

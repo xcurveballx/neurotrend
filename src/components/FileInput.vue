@@ -1,17 +1,20 @@
 <template>
-    <div class="control">
-        <div class="file">
-            <label class="file-label">
-                <input @change="addPhoto($event)" class="file-input" type="file">
-                <span class="file-cta">
-                    <span class="file-icon">
-                        <i class="fas fa-upload"></i>
+    <div class="field">
+        <label class="label">{{ label }}:</label>
+        <div class="control">
+            <div class="file">
+                <label class="file-label">
+                    <input @change="addPhoto($event)" class="file-input" type="file">
+                    <span class="file-cta">
+                        <span class="file-icon">
+                            <i class="fas fa-upload"></i>
+                        </span>
+                        <span class="file-label">
+                            Choose an image
+                        </span>
                     </span>
-                    <span class="file-label">
-                        Choose an image
-                    </span>
-                </span>
-            </label>
+                </label>
+            </div>
         </div>
     </div>
 </template>
@@ -23,6 +26,10 @@ export default {
         value: {
             required: true,
             type: [File, String]
+        },
+        label: {
+            required: true,
+            type: String
         }
     },
     methods: {
