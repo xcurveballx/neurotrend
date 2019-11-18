@@ -127,17 +127,29 @@ export default new Vuex.Store({
         if (context.getters[`${model}/${model}`]) return;
         context.commit('setAppBusy', true);
 
-        let key = context.getters.apiKey,
-            resp = await ApiController.fetchModel(key, model);
+        try {
+            let key = context.getters.apiKey,
+                resp = await ApiController.fetchModel(key, model);
 
-        // because it is 'dog' in urls and 'Dog' in actions' names
-        let modelUF = `${model[0].toUpperCase()}${model.slice(1)}`;
+            // logout & redirect to main page if session was destroyed
+            if (!resp.ok && [401, 403].includes(resp.status)) {
+                context.commit('setApiKey', '');
+                router.push('/');
+                context.commit('setUser', '');
+                EventBus.$emit('SHOW_NOTIFICATION', {message: resp.statusText, 'type': 'error'});
+            } else {
+                // because it is 'dog' in urls and 'Dog' in actions' names
+                let modelUF = `${model[0].toUpperCase()}${model.slice(1)}`;
 
-        context.commit('setIsLoading', false);
+                context.commit('setIsLoading', false);
 
-        if (resp && resp.results) {
-            context.commit(`${model}/set${modelUF}`, resp.results);
-        } else {
+                if (resp && resp.results) {
+                    context.commit(`${model}/set${modelUF}`, resp.results);
+                } else {
+                    context.commit('setIsError', true);
+                }
+            }
+        } catch(e) {
             context.commit('setIsError', true);
         }
 
@@ -151,34 +163,37 @@ export default new Vuex.Store({
     async getModelById(context, {model, id}) {
         if (context.getters.isAppBusy || !model || !id) return;
         context.commit('setAppBusy', true);
-try {
-        var key = context.getters.apiKey,
-            resp = await ApiController.fetchModelById(key, model, id);
 
-        // logout & redirect to main page if session was destroyed
-        if (!resp.ok && [401, 403].includes(resp.status)) {
-            context.commit('setApiKey', '');
-            router.push('/');
-            context.commit('setUser', '');
-            EventBus.$emit('SHOW_NOTIFICATION', {message: resp.statusText, 'type': 'error'});
-        }
+        try {
+            var key = context.getters.apiKey,
+                resp = await ApiController.fetchModelById(key, model, id);
 
-        // if the model has dependencies, go get them!
-        if (resp && resp.dog) {
-            resp.dog = await ApiController.fetchModelById(key, 'dog', resp.dog);
-        }
+            // logout & redirect to main page if session was destroyed
+            if (!resp.ok && [401, 403].includes(resp.status)) {
+                context.commit('setApiKey', '');
+                router.push('/');
+                context.commit('setUser', '');
+                EventBus.$emit('SHOW_NOTIFICATION', {message: resp.statusText, 'type': 'error'});
+            } else {
+                // if the model has dependencies, go get them!
+                if (resp && resp.dog) {
+                    resp.dog = await ApiController.fetchModelById(key, 'dog', resp.dog);
+                }
 
-        if (resp && resp.trustee) {
-            resp.trustee = await ApiController.fetchModelById(key, 'trustee', resp.trustee);
-        }
-} catch(e) {
-    console.log(e); // works only the request had physical troubles
-}
-        context.commit('setIsItemLoading', false);
+                if (resp && resp.trustee) {
+                    resp.trustee = await ApiController.fetchModelById(key, 'trustee', resp.trustee);
+                }
 
-        if (resp && resp.id) {
-            context.commit('setCurrentItem', resp);
-        } else {
+                context.commit('setIsItemLoading', false);
+
+                if (resp && resp.id) {
+                    context.commit('setCurrentItem', resp);
+                } else {
+                    context.commit('setIsItemError', true);
+                    context.commit('setCurrentItem', null);
+                }
+            }
+        } catch(e) {
             context.commit('setIsItemError', true);
             context.commit('setCurrentItem', null);
         }
@@ -199,37 +214,27 @@ try {
                 resp = await ApiController.updateModel(key, model, id, data);
 
             if (!resp.ok && [401, 403].includes(resp.status)) {
-
                 // logout & redirect to main page if session was destroyed
                 context.commit('setApiKey', '');
                 router.push('/');
                 context.commit('setUser', '');
                 EventBus.$emit('SHOW_NOTIFICATION', {message: resp.statusText, 'type': 'error'});
-
             } else if (!resp.ok && [400].includes(resp.status)) {
-
                 // wrong data format
                 EventBus.$emit('SHOW_NOTIFICATION', {message: resp.statusText, 'type': 'error'});
                 context.commit('setValidationErrors', await resp.json());
-
             } else {
-
                 if (resp && resp.id) {
-
                     let modelUF = `${model[0].toUpperCase()}${model.slice(1)}`;
                     context.commit('setCurrentItem', resp);
-                    context.commit('setValidationErrors');
+                    context.commit('setValidationErrors'); // clears val. errors
                     context.commit('toggleEditMode');
                     context.commit(`${model}/update${modelUF}`, resp);
                     EventBus.$emit('SHOW_NOTIFICATION', {message: 'Item has been successfully updated!', 'type': 'success'});
-
                 } else {
-
                     context.commit('setIsItemError', true);
                     context.commit('setCurrentItem', null);
-
                 }
-
             }
         } catch(e) {
             context.commit('setIsItemError', true);
@@ -252,36 +257,26 @@ try {
                 resp = await ApiController.createModel(key, model, data);
 
             if (!resp.ok && [401, 403].includes(resp.status)) {
-
                 // logout & redirect to main page if session was destroyed
                 context.commit('setApiKey', '');
                 router.push('/');
                 context.commit('setUser', '');
                 EventBus.$emit('SHOW_NOTIFICATION', {message: resp.statusText, 'type': 'error'});
-
             } else if (!resp.ok && [400].includes(resp.status)) {
-
                 // wrong data format
                 EventBus.$emit('SHOW_NOTIFICATION', {message: resp.statusText, 'type': 'error'});
                 context.commit('setValidationErrors', await resp.json());
-
             } else {
-
                 if (resp && resp.id) {
-
                     let modelUF = `${model[0].toUpperCase()}${model.slice(1)}`;
                     context.commit('setValidationErrors');
                     context.commit(`${model}/add${modelUF}`, resp);
                     EventBus.$emit('SHOW_NOTIFICATION', {message: 'Item has been successfully added!', 'type': 'success'});
                     router.push(`/${model}/`);
-
                 } else {
-
                     context.commit('setIsItemError', true);
                     context.commit('setCurrentItem', null);
-
                 }
-
             }
         } catch(e) {
             context.commit('setIsItemError', true);
@@ -304,27 +299,20 @@ try {
                 resp = await ApiController.deleteModel(key, model, id);
 
             if (!resp.ok && [401, 403].includes(resp.status)) {
-
                 // logout & redirect to main page if session was destroyed
                 context.commit('setApiKey', '');
                 router.push('/');
                 context.commit('setUser', '');
                 EventBus.$emit('SHOW_NOTIFICATION', {message: resp.statusText, 'type': 'error'});
-
             } else if (resp && resp.status == 204) {
-
                     let modelUF = `${model[0].toUpperCase()}${model.slice(1)}`;
                     context.commit(`${model}/remove${modelUF}`, id);
                     EventBus.$emit('SHOW_NOTIFICATION', {message: 'Item has been successfully removed!', 'type': 'success'});
                     router.push(`/${model}/`);
-
             } else {
-
                     context.commit('setIsItemError', true);
                     context.commit('setCurrentItem', null);
-
             }
-
         } catch(e) {
             console.log(e);
             context.commit('setIsItemError', true);
