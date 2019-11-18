@@ -14,16 +14,16 @@
             <div class="content">
                 <ul>
                     <li>
-                        Birthday: {{ dog.birth_time | formatDateRU }}
+                        Kind: {{ dog.kind }}
                     </li>
                     <li>
-                        Kind: {{ dog.kind }}
+                        Birthday: {{ dog.birth_time | formatDateRU }}
                     </li>
                     <li>
                         Registered: {{ dog.reg_time | formatDateTimeRU }}
                     </li>
                     <li>
-                        Trustee: {{ dog.trustee.fio }}
+                        Trustee: {{ trustee }}
                     </li>
                 </ul>
             </div>
@@ -33,7 +33,7 @@
                 <btn @click.native="toggleEdit" class="is-success">Edit</btn>
             </p>
             <p class="card-footer-item">
-                <btn class="is-danger">Delete</btn>
+                <btn @click.native="remove" class="is-danger">Delete</btn>
             </p>
         </footer>
     </div>
@@ -44,28 +44,42 @@ import Btn from "@/components/Button.vue";
 import EventBus from '@/bus';
 
 export default {
-  name: "DogCard",
-  props: {
-    model: {
-      required: true,
-      type: String
+    name: "DogCard",
+    computed: {
+        trustee: function () {
+            return this.dog.trustee ? this.dog.trustee.fio : 'not assigned';
+        }
     },
-    id: {
-      required: true,
-      type: String
+    props: {
+        model: {
+            required: true,
+            type: String
+        },
+        id: {
+            required: true,
+            type: String
+        },
+        dog: {
+            required: true,
+            type: Object
+        }
     },
-    dog: {
-      required: true,
-      type: Object
+    methods: {
+        toggleEdit () {
+            EventBus.$emit('TOGGLE_EDIT_MODE');
+        },
+        remove () {
+            let ans = window.confirm("Are you sure that you want to delete this item?");
+            if (ans) {
+                let payload = {};
+                payload.model = this.model;
+                payload.id = this.id;
+                EventBus.$emit('REMOVE_MODEL_BY_ID', payload);
+            }
+        }
+    },
+    components: {
+        Btn
     }
-  },
-  methods: {
-    toggleEdit () {
-      EventBus.$emit('TOGGLE_EDIT_MODE');
-    }
-  },
-  components: {
-    Btn
-  }
 };
 </script>

@@ -178,10 +178,27 @@ export default new Vuex.Store({
                 // if the model has dependencies, go get them!
                 if (resp && resp.dog) {
                     resp.dog = await ApiController.fetchModelById(key, 'dog', resp.dog);
+
+                    if (!context.getters['dog/dog']) {
+                        let res = await ApiController.fetchModel(key, 'dog');
+                        if (res && res.results) {
+                            context.commit(`dog/setDog`, res.results);
+                        } else {
+                            context.commit('setIsItemError', true);
+                        }
+                    }
                 }
 
                 if (resp && resp.trustee) {
                     resp.trustee = await ApiController.fetchModelById(key, 'trustee', resp.trustee);
+                    if (!context.getters['trustee/trustee']) {
+                        let res = await ApiController.fetchModel(key, 'trustee');
+                        if (res && res.results) {
+                            context.commit(`trustee/setTrustee`, res.results);
+                        } else {
+                            context.commit('setIsItemError', true);
+                        }
+                    }
                 }
 
                 context.commit('setIsItemLoading', false);
@@ -224,6 +241,32 @@ export default new Vuex.Store({
                 EventBus.$emit('SHOW_NOTIFICATION', {message: resp.statusText, 'type': 'error'});
                 context.commit('setValidationErrors', await resp.json());
             } else {
+                // if the model has dependencies, go get them!
+                if (resp && resp.dog) {
+                    resp.dog = await ApiController.fetchModelById(key, 'dog', resp.dog);
+
+                    if (!context.getters['dog/dog']) {
+                        let res = await ApiController.fetchModel(key, 'dog');
+                        if (res && res.results) {
+                            context.commit(`dog/setDog`, res.results);
+                        } else {
+                            context.commit('setIsItemError', true);
+                        }
+                    }
+                }
+
+                if (resp && resp.trustee) {
+                    resp.trustee = await ApiController.fetchModelById(key, 'trustee', resp.trustee);
+                    if (!context.getters['trustee/trustee']) {
+                        let res = await ApiController.fetchModel(key, 'trustee');
+                        if (res && res.results) {
+                            context.commit(`trustee/setTrustee`, res.results);
+                        } else {
+                            context.commit('setIsItemError', true);
+                        }
+                    }
+                }
+                
                 if (resp && resp.id) {
                     let modelUF = `${model[0].toUpperCase()}${model.slice(1)}`;
                     context.commit('setCurrentItem', resp);
