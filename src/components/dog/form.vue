@@ -45,7 +45,6 @@ import InputVal from "@/components/InputWithValidation.vue";
 import SelectList from "@/components/SelectList.vue";
 import CurrentImage from "@/components/CurrentImage.vue";
 import { mapGetters } from 'vuex';
-import EventBus from '@/bus';
 
 export default {
     name: "DogForm",
@@ -79,8 +78,8 @@ export default {
     methods: {
         toggleEdit() {
             if (this.id) {
-                EventBus.$emit('TOGGLE_EDIT_MODE');
-                EventBus.$emit('CLEAR_VALIDATION_ERRORS');
+                this.$eventBus.$emit('TOGGLE_EDIT_MODE');
+                this.$eventBus.$emit('CLEAR_VALIDATION_ERRORS');
             } else {
                 this.$router.push(`/${this.model}/`);
             }
@@ -99,9 +98,9 @@ export default {
             payload.data = formData;
 
             if (payload.id)
-                EventBus.$emit('UPDATE_MODEL', payload);
+                this.$eventBus.$emit('UPDATE_MODEL', payload);
             else
-                EventBus.$emit('CREATE_MODEL', payload);
+                this.$eventBus.$emit('CREATE_MODEL', payload);
         }
     },
     components: {

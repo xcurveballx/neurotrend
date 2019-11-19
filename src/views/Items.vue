@@ -32,7 +32,6 @@
 
 <script>
 import List from "@/components/List.vue";
-import EventBus from '@/bus';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -55,9 +54,9 @@ export default {
     methods: {
       add() {
           if (this.$route.name == 'add') return;
-          EventBus.$emit('ITEM_SELECTED', -1);
-          EventBus.$emit('SET_IS_LOADING', false);
-          EventBus.$emit('SET_IS_ERROR', false);
+          this.$eventBus.$emit('ITEM_SELECTED', -1);
+          this.$eventBus.$emit('SET_IS_LOADING', false);
+          this.$eventBus.$emit('SET_IS_ERROR', false);
           this.$router.push(`/${this.model}/add/`);
       }
     },
@@ -68,21 +67,21 @@ export default {
         List
     },
     created() {
-        EventBus.$emit('GET_MODEL', this.model);
+        this.$eventBus.$emit('GET_MODEL', this.model);
     },
     beforeRouteUpdate(to, from, next) {
         if (this.selectedItemIndex != -1) {
-            EventBus.$emit('ITEM_SELECTED', 0);
+            this.$eventBus.$emit('ITEM_SELECTED', 0);
         }
-        EventBus.$emit('HIDE_MENU_ON_MOB');
-        EventBus.$emit('GET_MODEL', to.params.model);
+        this.$eventBus.$emit('HIDE_MENU_ON_MOB');
+        this.$eventBus.$emit('GET_MODEL', to.params.model);
         next();
     },
     beforeRouteLeave (to, from, next) {
         if (this.selectedItemIndex != -1) {
-            EventBus.$emit('ITEM_SELECTED', 0);
+            this.$eventBus.$emit('ITEM_SELECTED', 0);
         }
-        EventBus.$emit('HIDE_MENU_ON_MOB');
+        this.$eventBus.$emit('HIDE_MENU_ON_MOB');
         next();
     },
 };

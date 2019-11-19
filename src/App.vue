@@ -12,7 +12,6 @@ import AppNotification from "@/components/Notification.vue";
 import AppHeader from "@/components/Header.vue";
 import AppFooter from "@/components/Footer.vue";
 import { mapActions, mapMutations, mapGetters } from 'vuex';
-import EventBus from '@/bus';
 
 export default {
     name: "App",
@@ -29,23 +28,23 @@ export default {
         AppFooter
     },
     mounted() {
-        EventBus.$on('SHOW_NOTIFICATION', this.createNotification);
-        EventBus.$on('REMOVE_NOTIFICATION', this.clearNotification);
-        EventBus.$on('LOGIN', this.login);
-        EventBus.$on('LOGOUT', this.logout);
-        EventBus.$on('GET_MODEL', this.getModel);
-        EventBus.$on('GET_MODEL_BY_ID', this.getModelById);
-        EventBus.$on('UPDATE_MODEL', this.updateModel);
-        EventBus.$on('CREATE_MODEL', this.createModel);
-        EventBus.$on('REMOVE_MODEL_BY_ID', this.removeModelById);
-        EventBus.$on('ITEM_SELECTED', this.setSelectedItemIndex);
-        EventBus.$on('SET_IS_LOADING', this.setIsLoading);
-        EventBus.$on('SET_IS_ERROR', this.setIsError);
-        EventBus.$on('TOGGLE_EDIT_MODE', this.toggleEditMode);
-        EventBus.$on('CLEAR_CURRENT_ITEM', this.setCurrentItem);
-        EventBus.$on('TOGGLE_MENU_ON_MOB', this.toggleIsMenuShownOnMob);
-        EventBus.$on('HIDE_MENU_ON_MOB', this.clearIsMenuShownOnMob);
-        EventBus.$on('CLEAR_VALIDATION_ERRORS', this.setValidationErrors);
+        this.$eventBus.$on('SHOW_NOTIFICATION', this.createNotification);
+        this.$eventBus.$on('REMOVE_NOTIFICATION', this.clearNotification);
+        this.$eventBus.$on('LOGIN', this.login);
+        this.$eventBus.$on('LOGOUT', this.logout);
+        this.$eventBus.$on('GET_MODEL', this.getModel);
+        this.$eventBus.$on('GET_MODEL_BY_ID', this.getModelById);
+        this.$eventBus.$on('UPDATE_MODEL', this.updateModel);
+        this.$eventBus.$on('CREATE_MODEL', this.createModel);
+        this.$eventBus.$on('REMOVE_MODEL_BY_ID', this.removeModelById);
+        this.$eventBus.$on('ITEM_SELECTED', this.setSelectedItemIndex);
+        this.$eventBus.$on('SET_IS_LOADING', this.setIsLoading);
+        this.$eventBus.$on('SET_IS_ERROR', this.setIsError);
+        this.$eventBus.$on('TOGGLE_EDIT_MODE', this.toggleEditMode);
+        this.$eventBus.$on('CLEAR_CURRENT_ITEM', this.setCurrentItem);
+        this.$eventBus.$on('TOGGLE_MENU_ON_MOB', this.toggleIsMenuShownOnMob);
+        this.$eventBus.$on('HIDE_MENU_ON_MOB', this.clearIsMenuShownOnMob);
+        this.$eventBus.$on('CLEAR_VALIDATION_ERRORS', this.setValidationErrors);
     }
 };
 </script>

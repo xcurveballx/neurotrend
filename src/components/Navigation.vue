@@ -25,16 +25,15 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import EventBus from '@/bus';
 
 export default {
     name: "Navigation",
     methods: {
         logout() {
-            EventBus.$emit('LOGOUT');
+            this.$eventBus.$emit('LOGOUT');
         },
         toogleOnMobile() {
-            EventBus.$emit('TOGGLE_MENU_ON_MOB');
+            this.$eventBus.$emit('TOGGLE_MENU_ON_MOB');
         }
     },
     computed: {

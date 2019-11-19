@@ -26,13 +26,11 @@
 </template>
 
 <script>
-import EventBus from '@/bus';
-
 export default {
     name: "List",
     methods: {
         sel(index) {
-            EventBus.$emit('ITEM_SELECTED', index);
+            this.$eventBus.$emit('ITEM_SELECTED', index);
         },
         showFirst() {
             if (!['item', 'add'].includes(this.$route.name) && !this.selected) {

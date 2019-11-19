@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import ApiController from './ApiController.js';
-import EventBus from '@/bus';
 import router from '@/router';
 import { dog } from './dog.js';
 import { payment } from './payment.js';
@@ -115,7 +114,7 @@ export default new Vuex.Store({
             let resp = await ApiController.login(user, pass);
 
             if (!resp.ok && [401].includes(resp.status)) {
-                EventBus.$emit('SHOW_NOTIFICATION', {message: resp.statusText + ': invalid login/password', 'type': 'error'});
+                context.dispatch('createNotification', {message: resp.statusText + ': invalid login/password', 'type': 'error'});
             } else {
                 let {status = '', token = false, message = 'Something went wrong :('} = resp;
 
@@ -124,11 +123,11 @@ export default new Vuex.Store({
                     context.commit('setApiKey', token);
                     router.push('/home/');
                 } else {
-                    EventBus.$emit('SHOW_NOTIFICATION', {message, 'type': 'error'});
+                    context.dispatch('createNotification', {message, 'type': 'error'});
                 }
             }
         } catch(e) {
-            EventBus.$emit('SHOW_NOTIFICATION', {message: e.message, 'type': 'error'});
+            context.dispatch('createNotification', {message: e.message, 'type': 'error'});
         }
 
         if (context.getters.isAppBusy) {
@@ -145,9 +144,9 @@ export default new Vuex.Store({
             context.commit('setApiKey', '');
             router.push('/');
             context.commit('setUser', '');
-            EventBus.$emit('SHOW_NOTIFICATION', {message, 'type': 'success'});
+            context.dispatch('createNotification', {message, 'type': 'success'});
         } else {
-            EventBus.$emit('SHOW_NOTIFICATION', {message, 'type': 'error'});
+            context.dispatch('createNotification', {message, 'type': 'error'});
         }
         return Promise.resolve();
     },
@@ -166,7 +165,7 @@ export default new Vuex.Store({
                 context.commit('setApiKey', '');
                 router.push('/');
                 context.commit('setUser', '');
-                EventBus.$emit('SHOW_NOTIFICATION', {message: resp.statusText, 'type': 'error'});
+                context.dispatch('createNotification', {message: resp.statusText, 'type': 'error'});
             } else {
                 // because it is 'dog' in urls and 'Dog' in actions' names
                 let modelUF = `${model[0].toUpperCase()}${model.slice(1)}`;
@@ -203,7 +202,7 @@ export default new Vuex.Store({
                 context.commit('setApiKey', '');
                 router.push('/');
                 context.commit('setUser', '');
-                EventBus.$emit('SHOW_NOTIFICATION', {message: resp.statusText, 'type': 'error'});
+                context.dispatch('createNotification', {message: resp.statusText, 'type': 'error'});
             } else {
                 // if the model has dependencies, go get them!
                 if (resp && resp.dog) {
@@ -265,10 +264,10 @@ export default new Vuex.Store({
                 context.commit('setApiKey', '');
                 router.push('/');
                 context.commit('setUser', '');
-                EventBus.$emit('SHOW_NOTIFICATION', {message: resp.statusText, 'type': 'error'});
+                context.dispatch('createNotification', {message: resp.statusText, 'type': 'error'});
             } else if (!resp.ok && [400].includes(resp.status)) {
                 // wrong data format
-                EventBus.$emit('SHOW_NOTIFICATION', {message: resp.statusText, 'type': 'error'});
+                context.dispatch('createNotification', {message: resp.statusText, 'type': 'error'});
                 context.commit('setValidationErrors', await resp.json());
             } else {
                 // if the model has dependencies, go get them!
@@ -303,7 +302,7 @@ export default new Vuex.Store({
                     context.commit('setValidationErrors'); // clears val. errors
                     context.commit('toggleEditMode');
                     context.commit(`${model}/update${modelUF}`, resp);
-                    EventBus.$emit('SHOW_NOTIFICATION', {message: 'Item has been successfully updated!', 'type': 'success'});
+                    context.dispatch('createNotification', {message: 'Item has been successfully updated!', 'type': 'success'});
                 } else {
                     context.commit('setIsItemError', true);
                     context.commit('setCurrentItem', null);
@@ -334,17 +333,17 @@ export default new Vuex.Store({
                 context.commit('setApiKey', '');
                 router.push('/');
                 context.commit('setUser', '');
-                EventBus.$emit('SHOW_NOTIFICATION', {message: resp.statusText, 'type': 'error'});
+                context.dispatch('createNotification', {message: resp.statusText, 'type': 'error'});
             } else if (!resp.ok && [400].includes(resp.status)) {
                 // wrong data format
-                EventBus.$emit('SHOW_NOTIFICATION', {message: resp.statusText, 'type': 'error'});
+                context.dispatch('createNotification', {message: resp.statusText, 'type': 'error'});
                 context.commit('setValidationErrors', await resp.json());
             } else {
                 if (resp && resp.id) {
                     let modelUF = `${model[0].toUpperCase()}${model.slice(1)}`;
                     context.commit('setValidationErrors');
                     context.commit(`${model}/add${modelUF}`, resp);
-                    EventBus.$emit('SHOW_NOTIFICATION', {message: 'Item has been successfully added!', 'type': 'success'});
+                    context.dispatch('createNotification', {message: 'Item has been successfully added!', 'type': 'success'});
                     router.push(`/${model}/`);
                 } else {
                     context.commit('setIsItemError', true);
@@ -376,11 +375,11 @@ export default new Vuex.Store({
                 context.commit('setApiKey', '');
                 router.push('/');
                 context.commit('setUser', '');
-                EventBus.$emit('SHOW_NOTIFICATION', {message: resp.statusText, 'type': 'error'});
+                context.dispatch('createNotification', {message: resp.statusText, 'type': 'error'});
             } else if (resp && resp.status == 204) {
                     let modelUF = `${model[0].toUpperCase()}${model.slice(1)}`;
                     context.commit(`${model}/remove${modelUF}`, id);
-                    EventBus.$emit('SHOW_NOTIFICATION', {message: 'Item has been successfully removed!', 'type': 'success'});
+                    context.dispatch('createNotification', {message: 'Item has been successfully removed!', 'type': 'success'});
                     router.push(`/${model}/`);
             } else {
                     context.commit('setIsItemError', true);

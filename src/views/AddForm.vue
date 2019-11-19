@@ -22,7 +22,6 @@ import TrusteeForm from "@/components/trustee/form.vue";
 import DogForm from "@/components/dog/form.vue";
 import PaymentForm from "@/components/payment/form.vue";
 import { mapGetters } from 'vuex';
-import EventBus from '@/bus';
 
 export default {
     name: "AddForm",
@@ -41,9 +40,9 @@ export default {
         PaymentForm
     },
     beforeRouteLeave(to, from, next) {
-        EventBus.$emit('ITEM_SELECTED', 0);
-        EventBus.$emit('HIDE_MENU_ON_MOB');
-        EventBus.$emit('CLEAR_VALIDATION_ERRORS');
+        this.$eventBus.$emit('ITEM_SELECTED', 0);
+        this.$eventBus.$emit('HIDE_MENU_ON_MOB');
+        this.$eventBus.$emit('CLEAR_VALIDATION_ERRORS');
         next();
     }
 };

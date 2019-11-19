@@ -26,7 +26,6 @@
 
 <script>
 import InputVal from "@/components/InputWithValidation.vue";
-import EventBus from '@/bus';
 
 export default {
     name: "Login",
@@ -48,7 +47,7 @@ export default {
                 user: this.user,
                 pass: this.pass
             };
-            EventBus.$emit('LOGIN', payload);
+            this.$eventBus.$emit('LOGIN', payload);
         }
     }
 };

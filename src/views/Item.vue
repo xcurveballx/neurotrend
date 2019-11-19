@@ -21,7 +21,6 @@
 import Dog from "@/components/dog/Dog.vue";
 import Payment from "@/components/payment/Payment.vue";
 import Trustee from "@/components/trustee/Trustee.vue";
-import EventBus from '@/bus';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -49,7 +48,7 @@ export default {
             model: this.model,
             id: this.id
         };
-        EventBus.$emit('GET_MODEL_BY_ID', payload);
+        this.$eventBus.$emit('GET_MODEL_BY_ID', payload);
     },
     beforeRouteUpdate(to, from, next) {
         let payload = {
@@ -57,20 +56,20 @@ export default {
             id: to.params.id
         };
         if (this.isInEditMode) {
-            EventBus.$emit('TOGGLE_EDIT_MODE');
+            this.$eventBus.$emit('TOGGLE_EDIT_MODE');
         }
-        EventBus.$emit('HIDE_MENU_ON_MOB');
-        EventBus.$emit('GET_MODEL_BY_ID', payload);
-        EventBus.$emit('CLEAR_VALIDATION_ERRORS');
+        this.$eventBus.$emit('HIDE_MENU_ON_MOB');
+        this.$eventBus.$emit('GET_MODEL_BY_ID', payload);
+        this.$eventBus.$emit('CLEAR_VALIDATION_ERRORS');
         next();
     },
     beforeRouteLeave(to, from, next) {
         if (this.isInEditMode) {
-            EventBus.$emit('TOGGLE_EDIT_MODE');
+            this.$eventBus.$emit('TOGGLE_EDIT_MODE');
         }
-        EventBus.$emit('CLEAR_CURRENT_ITEM', null);
-        EventBus.$emit('HIDE_MENU_ON_MOB');
-        EventBus.$emit('CLEAR_VALIDATION_ERRORS');
+        this.$eventBus.$emit('CLEAR_CURRENT_ITEM', null);
+        this.$eventBus.$emit('HIDE_MENU_ON_MOB');
+        this.$eventBus.$emit('CLEAR_VALIDATION_ERRORS');
         next();
     },
 };

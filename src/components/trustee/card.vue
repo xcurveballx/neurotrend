@@ -31,8 +31,6 @@
 </template>
 
 <script>
-import EventBus from '@/bus';
-
 export default {
     name: "TrusteeCard",
     props: {
@@ -51,7 +49,7 @@ export default {
     },
     methods: {
         toggleEdit () {
-            EventBus.$emit('TOGGLE_EDIT_MODE');
+            this.$eventBus.$emit('TOGGLE_EDIT_MODE');
         },
         remove () {
             let ans = window.confirm("Are you sure that you want to delete this item?");
@@ -59,7 +57,7 @@ export default {
                 let payload = {};
                 payload.model = this.model;
                 payload.id = this.id;
-                EventBus.$emit('REMOVE_MODEL_BY_ID', payload);
+                this.$eventBus.$emit('REMOVE_MODEL_BY_ID', payload);
             }
         }
     }

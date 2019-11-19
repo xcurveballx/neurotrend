@@ -5,8 +5,6 @@
 </template>
 
 <script>
-import EventBus from '@/bus';
-
 export default {
     name: "Home",
     data() {
@@ -15,7 +13,7 @@ export default {
         };
     },
     beforeRouteLeave(to, from, next) {
-      EventBus.$emit('HIDE_MENU_ON_MOB');
+      this.$eventBus.$emit('HIDE_MENU_ON_MOB');
       next();
     }
 };

@@ -14,8 +14,6 @@
 </template>
 
 <script>
-import EventBus from '@/bus';
-
 export default {
     name: "Notification",
     props: {
@@ -26,7 +24,7 @@ export default {
     },
     methods: {
         remove(id) {
-            EventBus.$emit("REMOVE_NOTIFICATION", id);
+            this.$eventBus.$emit("REMOVE_NOTIFICATION", id);
         },
         ifToAddClass(notificationType, classType) {
             return notificationType === classType;
