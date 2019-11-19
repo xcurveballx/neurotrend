@@ -10,102 +10,132 @@ import { trustee } from './trustee.js';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {
-    apiKey: '',
-    isAppBusy: false,
-    user: '',
-    loadingMsg: 'Loading...',
-    errorMsg: 'Something went wrong :( Try to visit this page later.',
-    isLoading: true,
-    isError: false,
-    currentItem: null,
-    isItemLoading: true,
-    isItemError: false,
-    selectedItemIndex: 0,
-    isInEditMode: false,
-    isMenuShownOnMob: false,
-    validationErrors: {}
+    state: {
+        apiKey: '',
+        isAppBusy: false,
+        user: '',
+        loadingMsg: 'Loading...',
+        errorMsg: 'Something went wrong :( Try to visit this page later.',
+        isLoading: true,
+        isError: false,
+        currentItem: null,
+        isItemLoading: true,
+        isItemError: false,
+        selectedItemIndex: 0,
+        isInEditMode: false,
+        isMenuShownOnMob: false,
+        validationErrors: {},
+        notifications: []
+    },
+    getters: {
+        apiKey: state => state.apiKey,
+        isAppBusy: state => state.isAppBusy,
+        user: state => state.user,
+        loadingMsg: state => state.loadingMsg,
+        errorMsg: state => state.errorMsg,
+        isLoading: state => state.isLoading,
+        isError: state => state.isError,
+        currentItem: state => state.currentItem,
+        isItemLoading: state => state.isItemLoading,
+        isItemError: state => state.isItemError,
+        selectedItemIndex: state => state.selectedItemIndex,
+        isInEditMode: state => state.isInEditMode,
+        isMenuShownOnMob: state => state.isMenuShownOnMob,
+        validationErrors: state => state.validationErrors,
+        notifications: state => state.notifications
+    },
+    mutations: {
+        setApiKey(state, key) {
+            state.apiKey = key;
+        },
+        setAppBusy(state, isAppBusy) {
+            state.isAppBusy = isAppBusy;
+        },
+        setUser(state, name) {
+            state.user = name;
+        },
+        setIsLoading(state, isLoading) {
+            state.isLoading = isLoading;
+        },
+        setIsError(state, isError) {
+            state.isError = isError;
+        },
+        setCurrentItem(state, currentItem) {
+            state.currentItem = currentItem;
+        },
+        setIsItemLoading(state, isItemLoading) {
+            state.isItemLoading = isItemLoading;
+        },
+        setIsItemError(state, isItemError) {
+            state.isItemError = isItemError;
+        },
+        setSelectedItemIndex(state, selectedItemIndex) {
+            state.selectedItemIndex = selectedItemIndex;
+        },
+        toggleEditMode(state) {
+            state.isInEditMode = !state.isInEditMode;
+        },
+        toggleIsMenuShownOnMob(state) {
+            state.isMenuShownOnMob = !state.isMenuShownOnMob;
+        },
+        clearIsMenuShownOnMob(state) {
+            if (state.isMenuShownOnMob) state.isMenuShownOnMob = false;
+        },
+        setValidationErrors(state, validationErrors) {
+            if (validationErrors)
+                state.validationErrors = validationErrors;
+            else
+                state.validationErrors = {};
+        },
+        setNotification(state, notification) {
+            state.notifications.push(notification);
+        },
+        clearNotification(state, key) {
+            state.notifications = state.notifications.filter(el => el.id != key);
+        },
   },
-  getters: {
-    apiKey: state => state.apiKey,
-    isAppBusy: state => state.isAppBusy,
-    user: state => state.user,
-    loadingMsg: state => state.loadingMsg,
-    errorMsg: state => state.errorMsg,
-    isLoading: state => state.isLoading,
-    isError: state => state.isError,
-    currentItem: state => state.currentItem,
-    isItemLoading: state => state.isItemLoading,
-    isItemError: state => state.isItemError,
-    selectedItemIndex: state => state.selectedItemIndex,
-    isInEditMode: state => state.isInEditMode,
-    isMenuShownOnMob: state => state.isMenuShownOnMob,
-    validationErrors: state => state.validationErrors
-  },
-  mutations: {
-    setApiKey(state, key) {
-      state.apiKey = key;
-    },
-    setAppBusy(state, isAppBusy) {
-      state.isAppBusy = isAppBusy;
-    },
-    setUser(state, name) {
-      state.user = name;
-    },
-    setIsLoading(state, isLoading) {
-      state.isLoading = isLoading;
-    },
-    setIsError(state, isError) {
-      state.isError = isError;
-    },
-    setCurrentItem(state, currentItem) {
-      state.currentItem = currentItem;
-    },
-    setIsItemLoading(state, isItemLoading) {
-      state.isItemLoading = isItemLoading;
-    },
-    setIsItemError(state, isItemError) {
-      state.isItemError = isItemError;
-    },
-    setSelectedItemIndex(state, selectedItemIndex) {
-      state.selectedItemIndex = selectedItemIndex;
-    },
-    toggleEditMode(state) {
-      state.isInEditMode = !state.isInEditMode;
-    },
-    toggleIsMenuShownOnMob(state) {
-      state.isMenuShownOnMob = !state.isMenuShownOnMob;
-    },
-    clearIsMenuShownOnMob(state) {
-      if (state.isMenuShownOnMob) state.isMenuShownOnMob = false;
-    },
-    setValidationErrors(state, validationErrors) {
-      if (validationErrors)
-        state.validationErrors = validationErrors;
-      else
-        state.validationErrors = {};
-    },
-  },
-  actions: {
+    actions: {
+        async createNotification(context, {message, type}) {
+            let notification = {};
+            notification.message = message;
+            notification.type = type;
+            notification.id = + new Date();
+
+            context.commit("setNotification", notification);
+            setTimeout(() => {
+                context.commit("clearNotification", notification.id)
+            }, 5000);
+            return Promise.resolve();
+        },
     async login(context, {user, pass}) {
-      if (context.getters.isAppBusy || !user || !pass) return;
-      context.commit('setAppBusy', true);
+        if (context.getters.isAppBusy || !user || !pass) return;
+        context.commit('setAppBusy', true);
 
-      let {status = '', token = false, message = 'Something went wrong :('} = await ApiController.login(user, pass);
+        try {
+            let resp = await ApiController.login(user, pass);
 
-      if (status == 'OK' && token) {
-          context.commit('setUser', user);
-          context.commit('setApiKey', token);
-          router.push('/home/');
-      } else {
-          EventBus.$emit('SHOW_NOTIFICATION', {message, 'type': 'error'});
-      }
+            if (!resp.ok && [401].includes(resp.status)) {
+                EventBus.$emit('SHOW_NOTIFICATION', {message: resp.statusText + ': invalid login/password', 'type': 'error'});
+            } else {
+                let {status = '', token = false, message = 'Something went wrong :('} = resp;
 
-      if (context.getters.isAppBusy) {
-          context.commit('setAppBusy', false);
-      }
+                if (status == 'OK' && token) {
+                    context.commit('setUser', user);
+                    context.commit('setApiKey', token);
+                    router.push('/home/');
+                } else {
+                    EventBus.$emit('SHOW_NOTIFICATION', {message, 'type': 'error'});
+                }
+            }
+        } catch(e) {
+            EventBus.$emit('SHOW_NOTIFICATION', {message: e.message, 'type': 'error'});
+        }
 
-      return Promise.resolve();
+        if (context.getters.isAppBusy) {
+            context.commit('setAppBusy', false);
+        }
+
+        return Promise.resolve();
     },
 
     async logout(context) {
@@ -368,7 +398,6 @@ export default new Vuex.Store({
 
         return Promise.resolve();
     }
-  },
-
-  modules: {dog, payment, trustee}
+    },
+    modules: {dog, payment, trustee}
 });

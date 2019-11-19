@@ -2,7 +2,7 @@
     <div class="field">
         <label class="label">{{ label }}</label>
         <div class="control has-icons-left has-icons-right">
-            <input type="text" :placeholder="placeholder" class="input" :class="{'is-danger': condition}" :value="value" @input="$emit('input', $event.target.value)">
+            <input :type="type" :placeholder="placeholder" class="input" :class="{'is-danger': condition}" :value="value" @input="$emit('input', $event.target.value)">
             <slot></slot>
             <span v-show="condition" class="icon is-small is-right">
                 <i class="fas fa-exclamation-triangle"></i>
@@ -37,7 +37,12 @@ export default {
         value: {
             required: true,
             type: String
-        }
+        },
+        type: {
+            required: false,
+            type: String,
+            default: "text"
+        },
     }
 };
 </script>

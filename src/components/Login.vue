@@ -8,7 +8,7 @@
                 </span>
             </input-val>
 
-            <input-val label="Password" placeholder="******" :condition="!pass && hasBeenSubmitted" v-model="pass" @keyup.native.enter="emitLoginEvent" msg="You must enter your password!">
+            <input-val type="password" label="Password" placeholder="******" :condition="!pass && hasBeenSubmitted" v-model="pass" @keyup.native.enter="emitLoginEvent" msg="You must enter your password!">
                 <span class="icon is-small is-left">
                     <i class="fa fa-lock"></i>
                 </span>

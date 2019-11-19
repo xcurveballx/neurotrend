@@ -11,31 +11,17 @@
 import AppNotification from "@/components/Notification.vue";
 import AppHeader from "@/components/Header.vue";
 import AppFooter from "@/components/Footer.vue";
-import { mapActions, mapMutations } from 'vuex';
+import { mapActions, mapMutations, mapGetters } from 'vuex';
 import EventBus from '@/bus';
 
 export default {
     name: "App",
-    data() {
-        return {
-            notifications: []
-        };
+    computed: {
+        ...mapGetters(["notifications"])
     },
     methods: {
-        showNotification: function({message, type}) {
-            let notification = {};
-            notification.message = message;
-            notification.type = type;
-            notification.id = + new Date();
-
-            this.notifications.push(notification);
-            setTimeout(this.removeNotification, 5000, notification.id);
-        },
-        removeNotification: function(key) {
-            this.notifications = this.notifications.filter(el => el.id != key);
-        },
-        ...mapActions(["login", "logout", "getModel", "getModelById", "updateModel", "createModel", "removeModelById"]),
-        ...mapMutations(["setSelectedItemIndex", "setIsLoading", "setIsError", "toggleEditMode", "setCurrentItem", "toggleIsMenuShownOnMob", "clearIsMenuShownOnMob", "setValidationErrors"])
+        ...mapActions(["login", "logout", "getModel", "getModelById", "updateModel", "createModel", "removeModelById", "createNotification"]),
+        ...mapMutations(["setSelectedItemIndex", "setIsLoading", "setIsError", "toggleEditMode", "setCurrentItem", "toggleIsMenuShownOnMob", "clearIsMenuShownOnMob", "setValidationErrors", "clearNotification"])
     },
     components: {
         AppNotification,
@@ -43,8 +29,8 @@ export default {
         AppFooter
     },
     mounted() {
-        EventBus.$on('SHOW_NOTIFICATION', this.showNotification);
-        EventBus.$on('REMOVE_NOTIFICATION', this.removeNotification);
+        EventBus.$on('SHOW_NOTIFICATION', this.createNotification);
+        EventBus.$on('REMOVE_NOTIFICATION', this.clearNotification);
         EventBus.$on('LOGIN', this.login);
         EventBus.$on('LOGOUT', this.logout);
         EventBus.$on('GET_MODEL', this.getModel);
