@@ -1,12 +1,12 @@
 <template>
 <div class="columns">
     <div class="column">
-        <page-message v-if="isLoading" class="y-5">
+        <page-message v-if="isLoading">
             {{ loadingMsg }}
             <progress class="progress is-small is-primary" max="100"></progress>
         </page-message>
 
-        <page-message v-if="isError" class="y-5">
+        <page-message v-if="isError">
             <i class="fas fa-bug"></i> {{ errorMsg }}
         </page-message>
 

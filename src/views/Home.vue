@@ -1,5 +1,5 @@
 <template>
-    <page-message class="y-5">
+    <page-message>
         <strong>Hi, {{ userName | uppercase }}!</strong> Use the navigation links above to visit corresponding page.
     </page-message>
 </template>

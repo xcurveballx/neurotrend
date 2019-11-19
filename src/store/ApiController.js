@@ -33,28 +33,28 @@ export default class ApiController {
     }
 
     static updateModel(key, model, id, data) {
-        let url = `${ApiController.host}${ApiController.api_path}${model}/${id}/`;
-        let opts = {
-            method: 'PUT',
-            body: data
-        };
+        let url = `${ApiController.host}${ApiController.api_path}${model}/${id}/`,
+            opts = {
+                method: 'PUT',
+                body: data
+            };
         return ApiController.fire(url, key, opts);
     }
 
     static createModel(key, model, data) {
-        let url = `${ApiController.host}${ApiController.api_path}${model}/`;
-        let opts = {
-            method: 'POST',
-            body: data
-        };
+        let url = `${ApiController.host}${ApiController.api_path}${model}/`,
+            opts = {
+                method: 'POST',
+                body: data
+            };
         return ApiController.fire(url, key, opts);
     }
 
     static deleteModel(key, model, id) {
-        let url = `${ApiController.host}${ApiController.api_path}${model}/${id}/`;
-        let opts = {
-            method: 'DELETE',
-        };
+        let url = `${ApiController.host}${ApiController.api_path}${model}/${id}/`,
+            opts = {
+                method: 'DELETE',
+            };
         return ApiController.fire(url, key, opts);
     }
 }
