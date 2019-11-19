@@ -2,7 +2,7 @@
     <section class="section">
         <div class="container">
             <div class="columns">
-                <about />
+                <about title="About shelters" />
                 <login />
             </div>
         </div>

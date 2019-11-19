@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <app-notification v-show="notifications.length" :notifications="notifications" />
-    <app-header />
+    <app-header :title="title" />
     <router-view />
-    <app-footer />
+    <app-footer :title="title" />
   </div>
 </template>
 
@@ -15,6 +15,11 @@ import { mapActions, mapMutations, mapGetters } from 'vuex';
 
 export default {
     name: "App",
+    data() {
+        return {
+            title: "Dog Shelter API"
+        };
+    },
     computed: {
         ...mapGetters(["notifications"])
     },
@@ -27,7 +32,7 @@ export default {
         AppHeader,
         AppFooter
     },
-    mounted() {
+    created() {
         this.$eventBus.$on('SHOW_NOTIFICATION', this.createNotification);
         this.$eventBus.$on('REMOVE_NOTIFICATION', this.clearNotification);
         this.$eventBus.$on('LOGIN', this.login);
