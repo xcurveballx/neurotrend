@@ -1,4 +1,6 @@
-import Vue from "vue"
+import Vue from "vue";
+import Btn from "@/components/Button.vue";
+import PageMessage from "@/components/PageMessage.vue";
 
 // filters
 Vue.filter("formatDateRU", (val) => new Date(val).toLocaleDateString("ru-RU"));
@@ -17,3 +19,7 @@ Vue.filter("formatDateTimeRU", (val) => {
     };
     return new Date(val).toLocaleDateString("ru-RU", opts);
 });
+
+// components
+Vue.component('btn', Btn);
+Vue.component('page-message', PageMessage);

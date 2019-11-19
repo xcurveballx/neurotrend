@@ -31,7 +31,6 @@
 </template>
 
 <script>
-import Btn from "@/components/Button.vue";
 import DateTime from "@/components/DateTime.vue";
 import FileInput from "@/components/FileInput.vue";
 import InputVal from "@/components/InputWithValidation.vue";
@@ -93,7 +92,6 @@ export default {
         }
     },
     components: {
-        Btn,
         DateTime,
         FileInput,
         InputVal,

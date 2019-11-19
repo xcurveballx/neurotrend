@@ -31,8 +31,6 @@
 </template>
 
 <script>
-import Btn from "@/components/Button.vue";
-import PageMessage from "@/components/PageMessage.vue";
 import List from "@/components/List.vue";
 import EventBus from '@/bus';
 import { mapGetters } from 'vuex';
@@ -67,8 +65,6 @@ export default {
         ...mapGetters(["isLoading", "isError", "loadingMsg", "errorMsg", "selectedItemIndex"]),
     },
     components: {
-        Btn,
-        PageMessage,
         List
     },
     created() {

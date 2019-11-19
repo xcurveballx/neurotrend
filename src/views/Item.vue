@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import PageMessage from "@/components/PageMessage.vue";
 import Dog from "@/components/dog/Dog.vue";
 import Payment from "@/components/payment/Payment.vue";
 import Trustee from "@/components/trustee/Trustee.vue";
@@ -41,7 +40,6 @@ export default {
         ...mapGetters(["currentItem", "isItemLoading", "isItemError", "loadingMsg", "errorMsg", "isInEditMode"])
     },
     components: {
-        PageMessage,
         Dog,
         Payment,
         Trustee

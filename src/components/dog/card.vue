@@ -40,7 +40,6 @@
 </template>
 
 <script>
-import Btn from "@/components/Button.vue";
 import EventBus from '@/bus';
 
 export default {
@@ -77,9 +76,6 @@ export default {
                 EventBus.$emit('REMOVE_MODEL_BY_ID', payload);
             }
         }
-    },
-    components: {
-        Btn
     }
 };
 </script>

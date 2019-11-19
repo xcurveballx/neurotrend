@@ -21,7 +21,6 @@
 import TrusteeForm from "@/components/trustee/form.vue";
 import DogForm from "@/components/dog/form.vue";
 import PaymentForm from "@/components/payment/form.vue";
-import PageMessage from "@/components/PageMessage.vue";
 import { mapGetters } from 'vuex';
 import EventBus from '@/bus';
 
@@ -39,8 +38,7 @@ export default {
     components: {
         TrusteeForm,
         DogForm,
-        PaymentForm,
-        PageMessage
+        PaymentForm
     },
     beforeRouteLeave(to, from, next) {
         EventBus.$emit('ITEM_SELECTED', 0);

@@ -19,13 +19,12 @@
                     Login
                 </btn>
             </div>
-            
+
         </div>
     </div>
 </template>
 
 <script>
-import Btn from "@/components/Button.vue";
 import InputVal from "@/components/InputWithValidation.vue";
 import EventBus from '@/bus';
 
@@ -39,7 +38,6 @@ export default {
         }
     },
     components: {
-        Btn,
         InputVal
     },
     methods: {
