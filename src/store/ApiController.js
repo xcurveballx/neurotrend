@@ -22,8 +22,9 @@ export default class ApiController {
         return ApiController.fire(url, key);
     }
 
-    static fetchModel(key, model) {
+    static fetchModel(key, model, pageURL) {
         let url = `${ApiController.host}${ApiController.api_path}${model}/`;
+        if (pageURL) url = pageURL;
         return ApiController.fire(url, key);
     }
 

@@ -6,10 +6,10 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="(item, index) in items" :key="item.id" :class="{ 'is-selected': index == selected }">
-                <th>{{ index + 1 }}</th>
+            <tr v-for="(item, index) in items" :key="item.id" :class="{ 'is-selected': currentCount + index == selected }">
+                <th>{{ currentCount + index + 1 }}</th>
                 <td>
-                    <router-link @click.native="sel(index)" :to="`/${model}/${item.id}/`" exact>
+                    <router-link @click.native="sel(currentCount, index)" :to="`/${model}/${item.id}/`" exact>
                         {{ item.name || item.purpose || item.fio }}
                     </router-link>
                 </td>
@@ -29,8 +29,8 @@
 export default {
     name: "List",
     methods: {
-        sel(index) {
-            this.$eventBus.$emit('ITEM_SELECTED', index);
+        sel(currentCount, index) {
+            this.$eventBus.$emit('ITEM_SELECTED', currentCount + index);
         },
         showFirst() {
             if (!['item', 'add'].includes(this.$route.name) && !this.selected) {
@@ -58,7 +58,11 @@ export default {
         trick: {
             required: true,
             type: Number
-        }
+        },
+        currentCount: {
+            required: true,
+            type: Number
+        },
     },
     created() {
         this.showFirst();

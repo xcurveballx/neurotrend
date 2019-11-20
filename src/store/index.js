@@ -24,7 +24,12 @@ export default new Vuex.Store({
         isInEditMode: false,
         isMenuShownOnMob: false,
         validationErrors: {},
-        notifications: []
+        notifications: [],
+        prevPage: null,
+        nextPage: null,
+        count: 0,
+        currentCount: 0,
+        perPage: 100
     },
     getters: {
         apiKey: state => state.apiKey,
@@ -41,7 +46,12 @@ export default new Vuex.Store({
         isInEditMode: state => state.isInEditMode,
         isMenuShownOnMob: state => state.isMenuShownOnMob,
         validationErrors: state => state.validationErrors,
-        notifications: state => state.notifications
+        notifications: state => state.notifications,
+        prevPage: state => state.prevPage,
+        nextPage: state => state.nextPage,
+        count: state => state.count,
+        currentCount: state => state.currentCount,
+        perPage: state => state.perPage,
     },
     mutations: {
         setApiKey(state, key) {
@@ -92,6 +102,21 @@ export default new Vuex.Store({
         clearNotification(state, key) {
             state.notifications = state.notifications.filter(el => el.id != key);
         },
+        setPrevPage(state, page) {
+            state.prevPage = page;
+        },
+        setNextPage(state, page) {
+            state.nextPage = page;
+        },
+        setCount(state, count) {
+            state.count = count;
+        },
+        setCurrentCount(state, count) {
+            state.currentCount += count;
+        },
+        clearCurrentCount(state) {
+            state.currentCount = 0;
+        },
   },
     actions: {
         async createNotification(context, {message, type}) {
@@ -106,6 +131,7 @@ export default new Vuex.Store({
             }, 5000);
             return Promise.resolve();
         },
+
         async login(context, {user, pass}) {
             if (context.getters.isAppBusy || !user || !pass) return;
             context.commit('setAppBusy', true);
@@ -151,14 +177,14 @@ export default new Vuex.Store({
             return Promise.resolve();
         },
 
-        async getModel(context, model) {
+        async getModel(context, {model, pageURL = null, count = 0}) {
             if (context.getters.isAppBusy || !model) return;
-            if (context.getters[`${model}/${model}`]) return;
+            if (!pageURL && context.getters[`${model}/${model}`]) return;
             context.commit('setAppBusy', true);
 
             try {
                 let key = context.getters.apiKey,
-                    resp = await ApiController.fetchModel(key, model);
+                    resp = await ApiController.fetchModel(key, model, pageURL);
 
                 // logout & redirect to main page if session was destroyed
                 if (!resp.ok && [401, 403].includes(resp.status)) {
@@ -174,6 +200,10 @@ export default new Vuex.Store({
 
                     if (resp && resp.results) {
                         context.commit(`${model}/set${modelUF}`, resp.results);
+                        context.commit(`setPrevPage`, resp.previous);
+                        context.commit(`setCount`, resp.count);
+                        context.commit(`setCurrentCount`, count);
+                        context.commit(`setNextPage`, resp.next);
                     } else {
                         context.commit('setIsError', true);
                     }

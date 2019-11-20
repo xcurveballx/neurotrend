@@ -1,10 +1,10 @@
 <template>
-  <div id="app">
-    <app-notification v-show="notifications.length" :notifications="notifications" />
-    <app-header :title="title" />
-    <router-view />
-    <app-footer :title="title" />
-  </div>
+    <div id="app">
+        <app-notification v-show="notifications.length" :notifications="notifications" />
+        <app-header :title="title" />
+        <router-view />
+        <app-footer :title="title" />
+    </div>
 </template>
 
 <script>
@@ -25,7 +25,7 @@ export default {
     },
     methods: {
         ...mapActions(["login", "logout", "getModel", "getModelById", "updateModel", "createModel", "removeModelById", "createNotification"]),
-        ...mapMutations(["setSelectedItemIndex", "setIsLoading", "setIsError", "toggleEditMode", "setCurrentItem", "toggleIsMenuShownOnMob", "clearIsMenuShownOnMob", "setValidationErrors", "clearNotification"])
+        ...mapMutations(["setSelectedItemIndex", "setIsLoading", "setIsError", "toggleEditMode", "setCurrentItem", "toggleIsMenuShownOnMob", "clearIsMenuShownOnMob", "setValidationErrors", "clearNotification", "clearCurrentCount"])
     },
     components: {
         AppNotification,
@@ -50,6 +50,7 @@ export default {
         this.$eventBus.$on('TOGGLE_MENU_ON_MOB', this.toggleIsMenuShownOnMob);
         this.$eventBus.$on('HIDE_MENU_ON_MOB', this.clearIsMenuShownOnMob);
         this.$eventBus.$on('CLEAR_VALIDATION_ERRORS', this.setValidationErrors);
+        this.$eventBus.$on('CLEAR_CURRENT_COUNT', this.clearCurrentCount);
     }
 };
 </script>

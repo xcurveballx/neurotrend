@@ -20,7 +20,16 @@
                 <i class="fas fa-plus"></i> Add new item
             </btn>
             <br />
-            <list :ths="ths" :model="model" :items="$store.getters[`${model}/${model}`]" :selected="selectedItemIndex" :trick="trick"/>
+            <list :ths="ths" :model="model" :items="$store.getters[`${model}/${model}`]" :selected="selectedItemIndex" :trick="trick" :currentCount="currentCount"/>
+
+            <nav v-if="count > perPage" class="pagination is-centered is-medium" role="navigation" aria-label="pagination">
+                <a @click.prevent="load(prevPage, -perPage)" class="pagination-previous" :disabled="!prevPage">
+                    Previous
+                </a>
+                <a @click.prevent="load(nextPage, perPage)" class="pagination-next" :disabled="!nextPage">
+                    Next page
+                </a>
+            </nav>
         </template>
     </div>
     <div class="column is-half-tablet is-one-third-desktop">
@@ -58,29 +67,43 @@ export default {
           this.$eventBus.$emit('SET_IS_LOADING', false);
           this.$eventBus.$emit('SET_IS_ERROR', false);
           this.$router.push(`/${this.model}/add/`);
+      },
+      load(pageURL, count) {
+          if (!pageURL) return;
+          let payload = {};
+          payload.model = this.model;
+          payload.pageURL = pageURL;
+          payload.count = count;
+          this.$eventBus.$emit('GET_MODEL', payload);
       }
     },
     computed: {
-        ...mapGetters(["isLoading", "isError", "loadingMsg", "errorMsg", "selectedItemIndex"]),
+        ...mapGetters(["isLoading", "isError", "loadingMsg", "errorMsg", "selectedItemIndex", "prevPage", "nextPage", "currentCount", "perPage", "count"]),
     },
     components: {
         List
     },
     created() {
-        this.$eventBus.$emit('GET_MODEL', this.model);
+        let payload = {};
+        payload.model = this.model;
+        this.$eventBus.$emit('GET_MODEL', payload);
     },
     beforeRouteUpdate(to, from, next) {
         if (this.selectedItemIndex != -1) {
             this.$eventBus.$emit('ITEM_SELECTED', 0);
         }
+        this.$eventBus.$emit('CLEAR_CURRENT_COUNT');
         this.$eventBus.$emit('HIDE_MENU_ON_MOB');
-        this.$eventBus.$emit('GET_MODEL', to.params.model);
+        let payload = {};
+        payload.model = to.params.model;
+        this.$eventBus.$emit('GET_MODEL', payload);
         next();
     },
     beforeRouteLeave (to, from, next) {
         if (this.selectedItemIndex != -1) {
             this.$eventBus.$emit('ITEM_SELECTED', 0);
         }
+        this.$eventBus.$emit('CLEAR_CURRENT_COUNT');
         this.$eventBus.$emit('HIDE_MENU_ON_MOB');
         next();
     },
