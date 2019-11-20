@@ -2,13 +2,13 @@
     <div class="column is-half-tablet is-one-third-desktop">
         <div class="box">
 
-            <input-val label="Username" placeholder="e.g. Username" :condition="!user && hasBeenSubmitted" v-model="user" @keyup.native.enter="login" msg="You must enter your user name!">
+            <input-val label="Username" placeholder="e.g. Username" :condition="!user && hasBeenSubmitted" v-model.trim="user" @keyup.native.enter="login" msg="You must enter your user name!">
                 <span class="icon is-small is-left">
                     <i class="fa fa-user"></i>
                 </span>
             </input-val>
 
-            <input-val type="password" label="Password" placeholder="******" :condition="!pass && hasBeenSubmitted" v-model="pass" @keyup.native.enter="login" msg="You must enter your password!">
+            <input-val type="password" label="Password" placeholder="******" :condition="!pass && hasBeenSubmitted" v-model.trim="pass" @keyup.native.enter="login" msg="You must enter your password!">
                 <span class="icon is-small is-left">
                     <i class="fa fa-lock"></i>
                 </span>

@@ -83,6 +83,11 @@ export default {
     components: {
         List
     },
+    updated() {
+        let payload = {};
+        payload.model = this.model;
+        this.$eventBus.$emit('GET_MODEL', payload);
+    },
     created() {
         let payload = {};
         payload.model = this.model;
@@ -92,7 +97,9 @@ export default {
         if (this.selectedItemIndex != -1) {
             this.$eventBus.$emit('ITEM_SELECTED', 0);
         }
-        this.$eventBus.$emit('CLEAR_CURRENT_COUNT');
+        if (to.name != 'add' && to.name != 'item') {
+            this.$eventBus.$emit('CLEAR_CURRENT_DATA');
+        }
         this.$eventBus.$emit('HIDE_MENU_ON_MOB');
         let payload = {};
         payload.model = to.params.model;
@@ -103,7 +110,9 @@ export default {
         if (this.selectedItemIndex != -1) {
             this.$eventBus.$emit('ITEM_SELECTED', 0);
         }
-        this.$eventBus.$emit('CLEAR_CURRENT_COUNT');
+        if (to.name != 'add' && to.name != 'item') {
+            this.$eventBus.$emit('CLEAR_CURRENT_DATA');
+        }
         this.$eventBus.$emit('HIDE_MENU_ON_MOB');
         next();
     },

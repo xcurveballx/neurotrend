@@ -43,6 +43,9 @@ export default {
         this.$eventBus.$emit('ITEM_SELECTED', 0);
         this.$eventBus.$emit('HIDE_MENU_ON_MOB');
         this.$eventBus.$emit('CLEAR_VALIDATION_ERRORS');
+        if (to.name != 'item') {
+            this.$eventBus.$emit('CLEAR_CURRENT_DATA', this.model);
+        }
         next();
     }
 };

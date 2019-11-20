@@ -10,6 +10,9 @@ export const dog = {
         setDog(state, dog) {
             state.dog = dog;
         },
+        clearDog(state) {
+            state.dog = null;
+        },
         updateDog(state, updatedDog) {
             if (!state.dog) return;
 

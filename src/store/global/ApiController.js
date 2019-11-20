@@ -28,6 +28,17 @@ export default class ApiController {
         return ApiController.fire(url, key);
     }
 
+    /* async generator, fetches all the pages, not only one 
+       as the function above does */
+    static async *fetchModelCompletely(key, model) {
+        let url = `${ApiController.host}${ApiController.api_path}${model}/`;
+        while (url) {
+            let response = await ApiController.fire(url, key)
+            url = response.next;
+            yield response.results;
+        }
+    }
+
     static fetchModelById(key, model, id) {
         let url = `${ApiController.host}${ApiController.api_path}${model}/${id}/`;
         return ApiController.fire(url, key);

@@ -1,0 +1,22 @@
+export const state = {
+    apiKey: '',
+    isAppBusy: false,
+    user: '',
+    loadingMsg: 'Loading...',
+    errorMsg: 'Something went wrong :( Try to visit this page later.',
+    isLoading: true,
+    isError: false,
+    currentItem: null,
+    isItemLoading: true,
+    isItemError: false,
+    selectedItemIndex: 0,
+    isInEditMode: false,
+    isMenuShownOnMob: false,
+    validationErrors: {},
+    notifications: [],
+    prevPage: null,
+    nextPage: null,
+    count: 0,
+    currentCount: 0,
+    perPage: 100
+};

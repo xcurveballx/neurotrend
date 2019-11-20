@@ -10,6 +10,9 @@ export const payment = {
         setPayment(state, payment) {
             state.payment = payment;
         },
+        clearPayment(state) {
+            state.payment = null;
+        },
         updatePayment(state, updatedPayment) {
             if (!state.payment) return;
 

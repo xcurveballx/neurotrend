@@ -24,8 +24,8 @@ export default {
         ...mapGetters(["notifications"])
     },
     methods: {
-        ...mapActions(["login", "logout", "getModel", "getModelById", "updateModel", "createModel", "removeModelById", "createNotification"]),
-        ...mapMutations(["setSelectedItemIndex", "setIsLoading", "setIsError", "toggleEditMode", "setCurrentItem", "toggleIsMenuShownOnMob", "clearIsMenuShownOnMob", "setValidationErrors", "clearNotification", "clearCurrentCount"])
+        ...mapActions(["login", "logout", "getModel", "getModelById", "updateModel", "createModel", "removeModelById", "createNotification", "clearCurrentData"]),
+        ...mapMutations(["setSelectedItemIndex", "setIsLoading", "setIsError", "toggleEditMode", "setCurrentItem", "toggleIsMenuShownOnMob", "clearIsMenuShownOnMob", "setValidationErrors", "clearNotification"])
     },
     components: {
         AppNotification,
@@ -50,7 +50,7 @@ export default {
         this.$eventBus.$on('TOGGLE_MENU_ON_MOB', this.toggleIsMenuShownOnMob);
         this.$eventBus.$on('HIDE_MENU_ON_MOB', this.clearIsMenuShownOnMob);
         this.$eventBus.$on('CLEAR_VALIDATION_ERRORS', this.setValidationErrors);
-        this.$eventBus.$on('CLEAR_CURRENT_COUNT', this.clearCurrentCount);
+        this.$eventBus.$on('CLEAR_CURRENT_DATA', this.clearCurrentData);
     }
 };
 </script>

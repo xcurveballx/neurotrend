@@ -10,6 +10,9 @@ export const trustee = {
         setTrustee(state, trustee) {
             state.trustee = trustee;
         },
+        clearTrustee(state) {
+            state.trustee = null;
+        },
         updateTrustee(state, updatedTrustee) {
             if (!state.trustee) return;
 
