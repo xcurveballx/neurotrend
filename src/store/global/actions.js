@@ -99,11 +99,11 @@ export const actions = {
                     context.commit(`setCurrentCount`, count);
                     context.commit(`setNextPage`, resp.next);
                 } else {
-                    context.commit('setIsError', true);
+                    context.dispatch('setItemsErrorFlag');
                 }
             }
         } catch(e) {
-            context.commit('setIsError', true);
+            context.dispatch('setItemsErrorFlag');
         }
         context.dispatch('clearBusyFlag');
     },
@@ -118,6 +118,7 @@ export const actions = {
             if (!resp.ok && [401, 403].includes(resp.status)) {
                 context.dispatch('accessDenied', resp.statusText);
             } else {
+                context.commit('setIsItemLoading', false);
                 // if the model has dependencies, go get them!
                 let dogs = [], trustees = [];
                 if (resp && resp.dog) {
@@ -137,16 +138,14 @@ export const actions = {
                     context.commit('trustee/setTrustee', trustees);
                 }
 
-                context.commit('setIsItemLoading', false);
-
                 if (resp && resp.id) {
                     context.commit('setCurrentItem', resp);
                 } else {
-                    context.dispatch('setErrorFlag');
+                    context.dispatch('setItemErrorFlag');
                 }
             }
         } catch(e) {
-            context.dispatch('setErrorFlag');
+            context.dispatch('setItemErrorFlag');
         }
         context.dispatch('clearBusyFlag');
     },
@@ -180,11 +179,11 @@ export const actions = {
                     context.commit(`${model}/update${modelUF}`, resp);
                     context.dispatch('createNotification', {message: 'Item has been successfully updated!', 'type': 'success'});
                 } else {
-                    context.dispatch('setErrorFlag');
+                    context.dispatch('setItemErrorFlag');
                 }
             }
         } catch(e) {
-            context.dispatch('setErrorFlag');
+            context.dispatch('setItemErrorFlag');
         }
         context.dispatch('clearBusyFlag');
     },
@@ -208,11 +207,11 @@ export const actions = {
                     context.dispatch('createNotification', {message: 'Item has been successfully added!', 'type': 'success'});
                     router.push(`/${model}/`);
                 } else {
-                    context.dispatch('setErrorFlag');
+                    context.dispatch('setItemErrorFlag');
                 }
             }
         } catch(e) {
-            context.dispatch('setErrorFlag');
+            context.dispatch('setItemErrorFlag');
         }
         context.dispatch('clearBusyFlag');
     },
@@ -232,10 +231,10 @@ export const actions = {
                 context.dispatch('createNotification', {message: 'Item has been successfully removed!', 'type': 'success'});
                 router.push(`/${model}/`);
             } else {
-                context.dispatch('setErrorFlag');
+                context.dispatch('setItemErrorFlag');
             }
         } catch(e) {
-            context.dispatch('setErrorFlag');
+            context.dispatch('setItemErrorFlag');
         }
         context.dispatch('clearBusyFlag');
     },
@@ -251,9 +250,15 @@ export const actions = {
         context.commit('setValidationErrors', await resp.json());
     },
 
-    async setErrorFlag(context) {
+    async setItemErrorFlag(context) {
+        context.commit('setIsItemLoading', false);
         context.commit('setIsItemError', true);
         context.commit('setCurrentItem', null);
+    },
+
+    async setItemsErrorFlag(context) {
+        context.commit('setIsLoading', false);
+        context.commit('setIsError', true);
     },
 
     async clearBusyFlag(context) {

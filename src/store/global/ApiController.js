@@ -28,7 +28,7 @@ export default class ApiController {
         return ApiController.fire(url, key);
     }
 
-    /* async generator, fetches all the pages, not only one 
+    /* async generator, fetches all the pages, not only one
        as the function above does */
     static async *fetchModelCompletely(key, model) {
         let url = `${ApiController.host}${ApiController.api_path}${model}/`;
