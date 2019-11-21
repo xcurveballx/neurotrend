@@ -3,16 +3,13 @@ import router from '@/router';
 
 export const actions = {
     async createNotification(context, {message, type}) {
-        let notification = {};
-        notification.message = message;
-        notification.type = type;
+        let notification = {message, type};
         notification.id = + new Date();
 
         context.commit("setNotification", notification);
         setTimeout(() => {
             context.commit("clearNotification", notification.id)
         }, 5000);
-        return Promise.resolve();
     },
 
     async clearCurrentData(context) {
@@ -23,7 +20,6 @@ export const actions = {
         context.commit("setPrevPage", null);
         context.commit("setNextPage", null);
         context.commit("setCount", 0);
-        return Promise.resolve();
     },
 
     async clearCurrentFlags(context) {
@@ -36,7 +32,6 @@ export const actions = {
         context.commit('setIsItemError', false);
         context.commit('clearIsMenuShownOnMob');
         context.commit('setValidationErrors');
-        return Promise.resolve();
     },
 
     async login(context, {user, pass}) {
@@ -45,12 +40,10 @@ export const actions = {
 
         try {
             let resp = await ApiController.login(user, pass);
-
             if (!resp.ok && [401].includes(resp.status)) {
                 context.dispatch('createNotification', {message: resp.statusText + ': invalid login/password', 'type': 'error'});
             } else {
                 let {status = '', token = false, message = 'Something went wrong :('} = resp;
-
                 if (status == 'OK' && token) {
                     context.commit('setUser', user);
                     context.commit('setApiKey', token);
@@ -62,25 +55,26 @@ export const actions = {
         } catch(e) {
             context.dispatch('createNotification', {message: e.message, 'type': 'error'});
         }
-
-        if (context.getters.isAppBusy) {
-            context.commit('setAppBusy', false);
-        }
-
-        return Promise.resolve();
+        context.dispatch('clearBusyFlag');
     },
 
     async logout(context) {
-        let {status = '', message = 'Something went wrong :('} = await ApiController.logout(context.getters.apiKey);
+        if (context.getters.isAppBusy) return;
+        context.commit('setAppBusy', true);
 
-        if (status == 'OK') {
-            context.dispatch('clearCurrentFlags');
-            router.push('/');
-            context.dispatch('createNotification', {message, 'type': 'success'});
-        } else {
-            context.dispatch('createNotification', {message, 'type': 'error'});
+        try {
+            let resp = await ApiController.logout(context.getters.apiKey);
+            if (!resp.ok && [401, 403].includes(resp.status)) {
+                context.dispatch('accessDenied', resp.statusText);
+            } else {
+                context.dispatch('clearCurrentFlags');
+                router.push('/');
+                context.dispatch('createNotification', {message: resp.message, 'type': 'success'});
+            }
+        } catch(e) {
+            context.dispatch('createNotification', {message: e.message, 'type': 'error'});
         }
-        return Promise.resolve();
+        context.dispatch('clearBusyFlag');
     },
 
     async getModel(context, {model, pageURL = null, count = 0}) {
@@ -91,19 +85,13 @@ export const actions = {
         try {
             let key = context.getters.apiKey,
                 resp = await ApiController.fetchModel(key, model, pageURL);
-
-            // logout & redirect to main page if session was destroyed
             if (!resp.ok && [401, 403].includes(resp.status)) {
-                context.dispatch('clearCurrentFlags');
-                router.push('/');
-                context.dispatch('createNotification', {message: resp.statusText, 'type': 'error'});
+                context.dispatch('accessDenied', resp.statusText);
             } else {
-                // because it is 'dog' in urls and 'Dog' in actions' names
-                let modelUF = `${model[0].toUpperCase()}${model.slice(1)}`;
-
                 context.commit('setIsLoading', false);
-
                 if (resp && resp.results) {
+                    // because it is 'dog' in urls and 'Dog' in actions' names
+                    let modelUF = `${model[0].toUpperCase()}${model.slice(1)}`;
                     context.commit(`${model}/clear${modelUF}`);
                     context.commit(`${model}/set${modelUF}`, resp.results);
                     context.commit(`setPrevPage`, resp.previous);
@@ -117,12 +105,7 @@ export const actions = {
         } catch(e) {
             context.commit('setIsError', true);
         }
-
-        if (context.getters.isAppBusy) {
-            context.commit('setAppBusy', false);
-        }
-
-        return Promise.resolve();
+        context.dispatch('clearBusyFlag');
     },
 
     async getModelById(context, {model, id}) {
@@ -132,30 +115,22 @@ export const actions = {
         try {
             let key = context.getters.apiKey,
                 resp = await ApiController.fetchModelById(key, model, id);
-
-            // logout & redirect to main page if session was destroyed
             if (!resp.ok && [401, 403].includes(resp.status)) {
-                context.dispatch('clearCurrentFlags');
-                router.push('/');
-                context.dispatch('createNotification', {message: resp.statusText, 'type': 'error'});
+                context.dispatch('accessDenied', resp.statusText);
             } else {
                 // if the model has dependencies, go get them!
+                let dogs = [], trustees = [];
                 if (resp && resp.dog) {
                     resp.dog = await ApiController.fetchModelById(key, 'dog', resp.dog);
-
                     // now we need the full fist of model items
-                    let dogs = [];
                     for await (let results of ApiController.fetchModelCompletely(key, 'dog')) {
                         dogs.push(...results);
                     }
                     context.commit('dog/setDog', dogs);
                 }
-
                 if (resp && resp.trustee) {
                     resp.trustee = await ApiController.fetchModelById(key, 'trustee', resp.trustee);
 
-                    // now we need the full fist of model items
-                    let trustees = [];
                     for await (let results of ApiController.fetchModelCompletely(key, 'trustee')) {
                         trustees.push(...results);
                     }
@@ -167,20 +142,13 @@ export const actions = {
                 if (resp && resp.id) {
                     context.commit('setCurrentItem', resp);
                 } else {
-                    context.commit('setIsItemError', true);
-                    context.commit('setCurrentItem', null);
+                    context.dispatch('setErrorFlag');
                 }
             }
         } catch(e) {
-            context.commit('setIsItemError', true);
-            context.commit('setCurrentItem', null);
+            context.dispatch('setErrorFlag');
         }
-
-        if (context.getters.isAppBusy) {
-            context.commit('setAppBusy', false);
-        }
-
-        return Promise.resolve();
+        context.dispatch('clearBusyFlag');
     },
 
     async updateModel(context, {model, id, data}) {
@@ -192,39 +160,16 @@ export const actions = {
                 resp = await ApiController.updateModel(key, model, id, data);
 
             if (!resp.ok && [401, 403].includes(resp.status)) {
-                // logout & redirect to main page if session was destroyed
-                context.dispatch('clearCurrentFlags');
-                router.push('/');
-                context.dispatch('createNotification', {message: resp.statusText, 'type': 'error'});
+                context.dispatch('accessDenied', resp.statusText);
             } else if (!resp.ok && [400].includes(resp.status)) {
-                // wrong data format
-                context.dispatch('createNotification', {message: resp.statusText, 'type': 'error'});
-                context.commit('setValidationErrors', await resp.json());
+                context.dispatch('wrongDataFormat', resp);
             } else {
                 // if the model has dependencies, go get them!
                 if (resp && resp.dog) {
                     resp.dog = await ApiController.fetchModelById(key, 'dog', resp.dog);
-
-                    if (!context.getters['dog/dog']) {
-                        let res = await ApiController.fetchModel(key, 'dog');
-                        if (res && res.results) {
-                            context.commit(`dog/setDog`, res.results);
-                        } else {
-                            context.commit('setIsItemError', true);
-                        }
-                    }
                 }
-
                 if (resp && resp.trustee) {
                     resp.trustee = await ApiController.fetchModelById(key, 'trustee', resp.trustee);
-                    if (!context.getters['trustee/trustee']) {
-                        let res = await ApiController.fetchModel(key, 'trustee');
-                        if (res && res.results) {
-                            context.commit(`trustee/setTrustee`, res.results);
-                        } else {
-                            context.commit('setIsItemError', true);
-                        }
-                    }
                 }
 
                 if (resp && resp.id) {
@@ -235,20 +180,13 @@ export const actions = {
                     context.commit(`${model}/update${modelUF}`, resp);
                     context.dispatch('createNotification', {message: 'Item has been successfully updated!', 'type': 'success'});
                 } else {
-                    context.commit('setIsItemError', true);
-                    context.commit('setCurrentItem', null);
+                    context.dispatch('setErrorFlag');
                 }
             }
         } catch(e) {
-            context.commit('setIsItemError', true);
-            context.commit('setCurrentItem', null);
+            context.dispatch('setErrorFlag');
         }
-
-        if (context.getters.isAppBusy) {
-            context.commit('setAppBusy', false);
-        }
-
-        return Promise.resolve();
+        context.dispatch('clearBusyFlag');
     },
 
     async createModel(context, {model, data}) {
@@ -258,16 +196,10 @@ export const actions = {
         try {
             let key = context.getters.apiKey,
                 resp = await ApiController.createModel(key, model, data);
-
             if (!resp.ok && [401, 403].includes(resp.status)) {
-                // logout & redirect to main page if session was destroyed
-                context.dispatch('clearCurrentFlags');
-                router.push('/');
-                context.dispatch('createNotification', {message: resp.statusText, 'type': 'error'});
+                context.dispatch('accessDenied', resp.statusText);
             } else if (!resp.ok && [400].includes(resp.status)) {
-                // wrong data format
-                context.dispatch('createNotification', {message: resp.statusText, 'type': 'error'});
-                context.commit('setValidationErrors', await resp.json());
+                context.dispatch('wrongDataFormat', resp);
             } else {
                 if (resp && resp.id) {
                     let modelUF = `${model[0].toUpperCase()}${model.slice(1)}`;
@@ -276,20 +208,13 @@ export const actions = {
                     context.dispatch('createNotification', {message: 'Item has been successfully added!', 'type': 'success'});
                     router.push(`/${model}/`);
                 } else {
-                    context.commit('setIsItemError', true);
-                    context.commit('setCurrentItem', null);
+                    context.dispatch('setErrorFlag');
                 }
             }
         } catch(e) {
-            context.commit('setIsItemError', true);
-            context.commit('setCurrentItem', null);
+            context.dispatch('setErrorFlag');
         }
-
-        if (context.getters.isAppBusy) {
-            context.commit('setAppBusy', false);
-        }
-
-        return Promise.resolve();
+        context.dispatch('clearBusyFlag');
     },
 
     async removeModelById(context, {model, id}) {
@@ -299,31 +224,39 @@ export const actions = {
         try {
             let key = context.getters.apiKey,
                 resp = await ApiController.deleteModel(key, model, id);
-
             if (!resp.ok && [401, 403].includes(resp.status)) {
-                // logout & redirect to main page if session was destroyed
-                context.dispatch('clearCurrentFlags');
-                router.push('/');
-                context.dispatch('createNotification', {message: resp.statusText, 'type': 'error'});
+                context.dispatch('accessDenied', resp.statusText);
             } else if (resp && resp.status == 204) {
-                    let modelUF = `${model[0].toUpperCase()}${model.slice(1)}`;
-                    context.commit(`${model}/remove${modelUF}`, id);
-                    context.dispatch('createNotification', {message: 'Item has been successfully removed!', 'type': 'success'});
-                    router.push(`/${model}/`);
+                let modelUF = `${model[0].toUpperCase()}${model.slice(1)}`;
+                context.commit(`${model}/remove${modelUF}`, id);
+                context.dispatch('createNotification', {message: 'Item has been successfully removed!', 'type': 'success'});
+                router.push(`/${model}/`);
             } else {
-                    context.commit('setIsItemError', true);
-                    context.commit('setCurrentItem', null);
+                context.dispatch('setErrorFlag');
             }
         } catch(e) {
-            console.log(e);
-            context.commit('setIsItemError', true);
-            context.commit('setCurrentItem', null);
+            context.dispatch('setErrorFlag');
         }
+        context.dispatch('clearBusyFlag');
+    },
 
-        if (context.getters.isAppBusy) {
-            context.commit('setAppBusy', false);
-        }
+    async accessDenied(context, msg) {
+        context.dispatch('clearCurrentFlags');
+        router.push('/');
+        context.dispatch('createNotification', {message: msg, 'type': 'error'});
+    },
 
-        return Promise.resolve();
+    async wrongDataFormat(context, resp) {
+        context.dispatch('createNotification', {message: resp.statusText, 'type': 'error'});
+        context.commit('setValidationErrors', await resp.json());
+    },
+
+    async setErrorFlag(context) {
+        context.commit('setIsItemError', true);
+        context.commit('setCurrentItem', null);
+    },
+
+    async clearBusyFlag(context) {
+        if (context.getters.isAppBusy) context.commit('setAppBusy', false);
     }
 };
